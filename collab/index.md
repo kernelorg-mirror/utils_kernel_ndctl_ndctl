@@ -23,7 +23,8 @@ layout: page
 * v6.17 and beyond
 
 ## Opens
-- Low Memory Hole enumeration
+- Low Memory Hole enumeration (Fabio)
+- DCD (Ira)
 
 ## cxl-cli / user tools
 
