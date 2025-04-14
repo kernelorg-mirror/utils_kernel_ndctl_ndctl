@@ -42,7 +42,7 @@ layout: page
 - Pending cxl/next
 * Ignore interleave granularity when ways=1 (Gregory)
 * Verify CHBS length for CXL 2.0 (Zhijian)
-* Remove always true condition for cxlctl_validate_hw_command()
+* Remove always true condition for cxlctl_validate_hw_command() (DaveJ)
 
 - Waiting on more review tags
 * CXL type2 support (Alejandro)
