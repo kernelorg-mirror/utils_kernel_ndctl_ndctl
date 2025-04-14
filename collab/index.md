@@ -14,6 +14,65 @@ layout: page
 * https://pmem.io/ndctl/collab/
 
 
+# April 2025
+* Opens
+* cxl-cli
+* QEMU
+* v6.15 rc fixes
+* v6.16 merge window
+* v6.17 and beyond
+
+## Opens
+- Low Memory Hole enumeration
+
+## cxl-cli / user tools
+
+## QEMU
+
+## v6.15 rc fixes
+- Pending cxl/fixes
+* GPF DVSEC fixes (Ming)
+
+- Waiting on more review tags
+* CXL Features: Address set_feature and offset flag (Ming)
+* CXL Features: Set out_len in set_feature failure case (Ming)
+* Skip Mem_En check for RCD and RCH ports (Smita)
+
+## v6.16 merge window
+- Pending cxl/next
+* Ignore interleave granularity when ways=1 (Gregory)
+* Verify CHBS length for CXL 2.0 (Zhijian)
+* Remove always true condition for cxlctl_validate_hw_command()
+
+- Waiting on more review tags
+* CXL type2 support (Alejandro)
+  - Going through v13 review 
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  - Going through v8 review
+* AMD Zen5 address translation support (Robert)
+  - Going through v2 review
+* Managed SOFT RESERVE resource handling (Terry)
+  - Going through v3 review
+* DCD support (Ira)
+  - v9 posted
+* Enable region creation on x86 with low memory hole (Fabio)
+  - Discussion on going
+* Delay dport initialization (DaveJ)
+  - Going through v1 review
+* CXL reset support for devices. (Srirangan)
+  - Going through v2 review
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending v2
+* Update CXL maturity map. (Alison)
+  - Need review
+
+## v6.17 and beyond
+* Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Need review
+* vfio-cxl type 2 (Zhi)
+* Hotness Driver (Jonathan)
+
+
 # March 2025
 * Opens
 * cxl-cli
