@@ -27,6 +27,16 @@ layout: page
 - DCD (Ira)
 
 ## cxl-cli / user tools
+* v81 was released end of Q1.
+* Collecting features for a v82 at end of Q2, aligned w 6.15.
+  * ndctl: Add support and test for CXL Features support (DaveJ)
+    - Needs review. Driver support is in.
+  * ndctl: Introduce sanitize-memdev functionality (DavidLohr)
+    - Needs review. Driver support is in.
+  * ndctl: Add inject-error command (Ben)
+	- Pending an update from Ben
+  * ndctl: Dynamic Capacity additions for cxl-cli (Ira)
+    - Awaiting driver decision.
 
 ## QEMU
 
@@ -63,13 +73,13 @@ layout: page
 * CXL reset support for devices. (Srirangan)
   - Going through v2 review
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
-  - Pending v2
+  - Pending a v2 update
+* Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Needs review
 * Update CXL maturity map. (Alison)
   - Need review
 
 ## v6.17 and beyond
-* Translate DPA->HPA in unaligned MOD3 regions (Alison)
-  - Need review
 * vfio-cxl type 2 (Zhi)
 * Hotness Driver (Jonathan)
 
