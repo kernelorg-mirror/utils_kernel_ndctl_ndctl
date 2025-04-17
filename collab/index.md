@@ -23,22 +23,84 @@ layout: page
 * v6.17 and beyond
 
 ## Opens
-- Low Memory Hole enumeration (Fabio)
 - DCD (Ira)
+  * Fan tried a qemu test -- failing
+    * Is using the latest stuff
+    * Ira does not have a lot of time
+  * Jonathan __will__ be taking this forward as a fork
+    * please review it!
+    * Is DAX ok?
+    * why is this different than other features which have landed well ahead of hardware?
+- Low Memory Hole enumeration (Fabio)
+  * Robert wanted some changes (different direction)
+    * more isolation within the implementation for special features
+    * Address translation rework has a lot of conflicts
+      * hard to follow
+    * proposal to have a check if the LMH applies then use the SPA range
+    * Dan is missing the conflicts -- refactoring is ok
+      * LMH is a small change - different from a whole new addressing space
+      * what happens when a 3rd, 4th...  etc show up?
+        * don't be surprised by these things(?)
+      * why does this quirk need to be delayed by larger changes?
+        * some code conflicts
+        * but does LMH break the new code?
+    * Robert - extended linear caching is harder to abstract and LMH makes that harder
+      * wants some code isolation
+      * flat2lm messes this up too - LMH is yet another thing
+      * is the refactoring for flat2lm done?
+        * not yet
+      * the refactoring should make LMH fit easier
+        * makes SPA != HPA => use for LMH
+      * part 2 of Roberts series would do this.
+        * this has been posted. "Address translation part 1 and 2"
+        * part 1 does not conflict as much
+          * Could be helpful to get this landed to clear the backlog
+        * part 2 mostly needs to be resolved -> hard
+  * Linux has suffered from platforms taking liberties (inveted on the fly)
+    * there has to be a conversation somewhere on these special configs
+    * can we get some rules around these things
+  * examples
+    * no CFMWS for type2
+    * SPA vs HPA
+* John G. -- FAMfs RFC v6.14 out soon.  6.15 rework comming
+* Gregory working on boot to bash stuff to put in documentation
+  - need opinions on this
+  - in a personal-public github
+
 
 ## cxl-cli / user tools
 * v81 was released end of Q1.
 * Collecting features for a v82 at end of Q2, aligned w 6.15.
   * ndctl: Add support and test for CXL Features support (DaveJ)
-    - Needs review. Driver support is in.
+    - __Needs review__. Driver support is in.
   * ndctl: Introduce sanitize-memdev functionality (DavidLohr)
-    - Needs review. Driver support is in.
+    - __Needs review__. Driver support is in.
   * ndctl: Add inject-error command (Ben)
-	- Pending an update from Ben
+	  - Pending an update from Ben
   * ndctl: Dynamic Capacity additions for cxl-cli (Ira)
-    - Awaiting driver decision.
+    - Awaiting driver decision
+    - might need some clean up on the base commit
+    - but it is out there
 
 ## QEMU
+* 10.0 out today or next week
+* fairly minor features will land after that
+* arm support waiting for __review__
+* FM-API __review__
+* FM in qemu A controlling devices in qemu B
+  * RFC - test FM commands through MCTP
+  * uses QMP to notify qemu B
+  * MCTP messages is in shared buffer
+  * Need feedback from upstream -> may need a socket vs shared buffer
+  * 'whatever works' ...
+  * FM in host could work -> nice to have kernel stack formulate MCTP
+  * what blocks MCTP
+    * open BMC is blocked by lack of tests
+      * need to know what happens with malformed packets
+    * long way around is to use a PCI (with a distro) -> i2c emulated device
+      * could abuse this work.
+  * could just use ARM for MCTP with open BMC
+
 
 ## v6.15 rc fixes
 - Pending cxl/fixes
@@ -46,8 +108,10 @@ layout: page
 
 - Waiting on more review tags
 * CXL Features: Address set_feature and offset flag (Ming)
+  * email sent
 * CXL Features: Set out_len in set_feature failure case (Ming)
 * Skip Mem_En check for RCD and RCH ports (Smita)
+
 
 ## v6.16 merge window
 - Pending cxl/next
@@ -60,28 +124,82 @@ layout: page
   - Going through v13 review 
 * Enable CXL PCIe port protocol error handling and logging (Terry)
   - Going through v8 review
+  - working on it but ioresource is higher priority
 * AMD Zen5 address translation support (Robert)
   - Going through v2 review
+  - will send part 1 first and can focus on that now
 * Managed SOFT RESERVE resource handling (Terry)
   - Going through v3 review
-* DCD support (Ira)
-  - v9 posted
+  - build bot issues v4 comming.
 * Enable region creation on x86 with low memory hole (Fabio)
   - Discussion on going
+  - Focus on clean ups (part 1 series) then decide on LMH
 * Delay dport initialization (DaveJ)
   - Going through v1 review
 * CXL reset support for devices. (Srirangan)
   - Going through v2 review
+  - PCIe subsystem review
+  - v3 needed but awaiting more comments prior
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   - Pending a v2 update
 * Translate DPA->HPA in unaligned MOD3 regions (Alison)
   - Needs review
+  - label RFC but please review anyway
+  - priority vs LMH/part 1 rework/part 2?
+    - Gregory does not see anything obvious but will take a quick look
+      - may be subtle interleave position issues
+      - any 3-way region will be unaligned
 * Update CXL maturity map. (Alison)
-  - Need review
+  - Need review?
+  - the maturity map needs more review but not Alisons' patch itself
+  - Please update the maturity map as part of documenting any changes one submits
+* RAS features drivers
+  - ACPI should land in 6.16 too
+  - locking bugs -> fixed in v3 just posted
+
 
 ## v6.17 and beyond
+* DCD support (Ira)
+  - v9 posted
+  - Dan's uncomfort
+    - Dan did a public demo almost 2 years ago -> all dissapeared
+    - device dax does not have review scalability
+      - low priority for Dan
+    - would like to have an end user stand up
+    - what about the FM development
+    - this has stopped being a priority
+  - John Groves - was shown a demo - not public...  yet
+    - sharable memory
+    - Has a person who has been testing this
+    - emulation is probably at a point that John could test this
+    - AR : John look at the interface and contribute what they need with tagging to make this work for them.  With a real use case.
+  - Johnathan prefered some of the older interfaces but these have all been ok
+    - Also need a virtualization story
+    - virtio plan is gone
+      - cxl emulation is in
+    - keep this alive on top of type2
+    - Johnathan will continue to have a staging branch - as stated above
+  - Gregory
+    - is dax the right interface for virtualization
+    - among us we have users
+  - Yannis - Is this chicken and egg?
+    - there are demos
+  - Is the interface what we want to support?
+    - is it sufficient?
+    - Dan we know this is not a slam dunk interface
+    - does it matter if dax may go away?
+      - dax was advocated at LSFmm - so not going away
 * vfio-cxl type 2 (Zhi)
+  - next version?
 * Hotness Driver (Jonathan)
+  - focus is on emulation (qemu) first
+* non-x86 cache flushing ("wbinv")
+  - need review
+  - arm focused but should work anywhere
+  - used device classes (show in sysfs)
+    - but no user interface now
+    - could be used for specific flushes
+      - various methods
 
 
 # March 2025
