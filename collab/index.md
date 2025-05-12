@@ -13,6 +13,72 @@ layout: page
 * Do follow-up on linux-cxl@vger.kernel.org for longer questions / debug
 * https://pmem.io/ndctl/collab/
 
+# May 2025
+* Opens
+* QEMU
+* v6.15 rc fixes
+* v6.16 merge window
+* v6.17 and beyond
+
+## Opens
+
+## cxl-cli / user tools
+
+## QEMU
+
+## v6.15 RC fixes
+* RC4 PR done
+* No more fixes PR unless extremely urgent.
+
+## v6.16 merge window - queued
+* Remove always true condition for cxlctl_validate_hw_command()
+* Verify CHBS length for CXL2.0
+* Ignore interleave granularity when ways=1
+* Address missing MODULE_DESCRIPTION warnings for cxl_test
+* Cleanups and refactors part 1 for Zen5 translation support
+* Cleanup debug printk for cxl_dpa_alloc()
+
+## v6.16 merge window - considering
+* type2 support (Alejandro)
+  - v15 posted
+* Boot to Bash documentation (Gregory)
+  - v3 posted. Review tags please.
+- CXL Maturity Map update (Alison)
+  - v2 posted. Review tags please.
+* RAS features drivers (Shiju)
+  - v4 posted, ready for merge?
+
+## v6.17
+* Using full data transfer only when offset is 0 (Ming)
+  - Waiting on Jonathan to hear back from consortium on spec language interpretation
+* Native port protocol error handling and logging (Terry)
+  - Pending v9
+* Soft Reserve handling (Terry)
+  - Pending v4
+* Introduce DEFINE_ACQUIRE() (Dan)
+  - Going through discussions
+* Delayed port enumeration (Dave)
+  - v2 posted, going through reviews
+  - Can Robert check and see if that resolves his dport num issue reported
+* Initialize eiw and eig (Purva)
+  - Pending v2
+* Low Mem Hole (Fabio)
+  - Waiting on ECN
+* Zen5 translate part 2 (Robert)
+  - pending next rev?
+* CXL reset support for devices. (Srirangan)
+  - Pending v3
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending a v2 update
+* (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
+
+## v6.18 and beyond
+* DCD (Ira)
+  - v9 posted
+* vfio-cxl type 2 (Zhi)
+* Hotness Driver (Jonathan)
+* non-x86 cache flushing ("wbinv") (Jonathan)
+
 
 # April 2025
 * Opens
