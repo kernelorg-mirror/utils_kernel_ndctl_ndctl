@@ -23,8 +23,24 @@ layout: page
 ## Opens
 
 ## cxl-cli / user tools
+Collecting patches for a v82 release at EOQ 2, align w kernel 6.15.
+* ndctl: Add support and test for CXL Features support (DaveJ)
+  - Needs review tags
+* ndctl: Introduce sanitize-memdev functionality (DavidLohr)
+  - Needs review tags
+* ndctl: Add inject-error command (Ben)
+  - ? Pending an update from Ben considering Junhyeok prior set ?
+* ndctl: Dynamic Capacity additions for cxl-cli (Ira)
+  - Deferred but not forgotten
 
 ## QEMU
+Jonathan's Discord Update (He's enjoying fine food in Lisbon)
+* Most of left over stuff that was queued for 10.0 is now queued by MST.
+  One patch dropped as compile issue.
+* Tcg bug introduced in some tlb cleanup work. Affecting code running from
+  cxl mem and some other cases.
+* Arm support v13 posted.
+* Dcd fmapi updated series on list (Jonathan hasn't looked at yet).
 
 ## v6.15 RC fixes
 * RC4 PR done
