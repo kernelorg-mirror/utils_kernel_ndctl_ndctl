@@ -15,19 +15,37 @@ layout: page
 
 # May 2025
 * Opens
+* cxl-cli
 * QEMU
 * v6.15 rc fixes
 * v6.16 merge window
 * v6.17 and beyond
 
 ## Opens
+RobertR: ECN update wrt addr trans series? Can't talk confidential
+side of proposal. Linux side - file code first ECNs (like ACPI) what
+we want FW/BIOS to provide. Doing similar for mem hole problem.
+Code first means Linux writes rules Linux needs added to CXL spec.
+ACPI ECN examples, ACPI0017, extended linear cache.
+By starting discussion in open, on Linux mailing list, not encumbered
+for consortium confidentiality.
+
+RobertR: patches address AMD specific addr trans, do we have other
+users?  Should we be pushing a generic solution now? Ans: stay
+specific now.
+
+FanN: Issue (device probe) using DCD patch set. Has worked around it. 
+FanN to post on cxl mailing list.
+
+DanW: cxl reset - does use case include issuing a reset from userspace?
+
 
 ## cxl-cli / user tools
 Collecting patches for a v82 release at EOQ 2, align w kernel 6.15.
 * ndctl: Add support and test for CXL Features support (DaveJ)
   - Needs review tags
 * ndctl: Introduce sanitize-memdev functionality (DavidLohr)
-  - Needs review tags
+  - David pinging user who asked about in earlier this year
 * ndctl: Add inject-error command (Ben)
   - ? Pending an update from Ben considering Junhyeok prior set ?
 * ndctl: Dynamic Capacity additions for cxl-cli (Ira)
@@ -56,9 +74,10 @@ Jonathan's Discord Update (He's enjoying fine food in Lisbon)
 
 ## v6.16 merge window - considering
 * type2 support (Alejandro)
-  - v15 posted
+  - v15 posted, v16 coming w rebase on rc4
 * Boot to Bash documentation (Gregory)
   - v3 posted. Review tags please.
+    Plan is to merge as is and expect incremental fixups can follow
 - CXL Maturity Map update (Alison)
   - v2 posted. Review tags please.
 * RAS features drivers (Shiju)
@@ -69,7 +88,8 @@ Jonathan's Discord Update (He's enjoying fine food in Lisbon)
   - Waiting on Jonathan to hear back from consortium on spec language interpretation
 * Native port protocol error handling and logging (Terry)
   - Pending v9
-* Soft Reserve handling (Terry)
+    will need to get new Bjorn tags.
+* Soft Reserve handling (Terry-->Smitha)
   - Pending v4
 * Introduce DEFINE_ACQUIRE() (Dan)
   - Going through discussions
@@ -79,18 +99,19 @@ Jonathan's Discord Update (He's enjoying fine food in Lisbon)
 * Initialize eiw and eig (Purva)
   - Pending v2
 * Low Mem Hole (Fabio)
-  - Waiting on ECN
+  - Waiting on ECN to post next rev
 * Zen5 translate part 2 (Robert)
   - pending next rev?
 * CXL reset support for devices. (Srirangan)
   - Pending v3
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
-  - Pending a v2 update
+  - Pending v3
 * (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Needs review and will need an ECN or the like also.
 
 ## v6.18 and beyond
 * DCD (Ira)
-  - v9 posted
+  - v9 posted, still waiting for a use case
 * vfio-cxl type 2 (Zhi)
 * Hotness Driver (Jonathan)
 * non-x86 cache flushing ("wbinv") (Jonathan)
