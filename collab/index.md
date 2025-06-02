@@ -13,6 +13,29 @@ layout: page
 * Do follow-up on linux-cxl@vger.kernel.org for longer questions / debug
 * https://pmem.io/ndctl/collab/
 
+# June 2025
+* Opens
+* cxl-cli
+* QEMU
+* v6.16
+* v6.16 rc fixes
+* v6.17 merge window
+* v6.18 and beyond
+
+## Opens
+## cxl-cli
+* v82 release expected only include what is in pending today.[1]
+  Any patches left out, are either pending an update or lack Reviewed-by tag.
+  [1] https://github.com/pmem/ndctl/commits/pending
+
+
+## QEMU
+## v6.16
+## v6.16 rc fixes
+## v6.17 merge window
+## v6.18 and beyond
+
+
 # May 2025
 * Opens
 * cxl-cli
