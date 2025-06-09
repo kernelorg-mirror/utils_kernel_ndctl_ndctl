@@ -17,7 +17,6 @@ layout: page
 * Opens
 * cxl-cli
 * QEMU
-* v6.16
 * v6.16 rc fixes
 * v6.17 merge window
 * v6.18 and beyond
@@ -30,10 +29,56 @@ layout: page
 
 
 ## QEMU
-## v6.16
-## v6.16 rc fixes
+
+## v6.16 rc fixes (Applied to cxl/fixes)
+* fix return value in cxlctl_validate_set_features()
+
 ## v6.17 merge window
+### cxl/next applied
+* Documentation/driver-api/cxl: Introduce conventions.rst
+* Documentation: cxl: fix typos and improve clarity in memory-devices.rst
+* cxl/pci: Replace mutex_lock_io() w mutex_lock() for mailbox access
+* cxl_test: Limit location for fake CFMWS to mappable range
+* Fix the min_scrub_cycle of a region miscalculation (Ming)
+
+### cxl/next targets
+* Type2 device support (Alejandro)
+  - Pending v17
+* Add managed SOFT RESERVE resource handling (Smita)
+  - Pending v5
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  - Pending v10
+  - Will need to get new Bjorn tags.
+* Delayed port enumeration (Dave)
+  - Pending v4
+  - Need to consider Robert's request of providing dport port_num via sysfs
+* Remove core/acpi.c (Dave)
+  - Pending v2
+* Introduce DEFINE_ACQUIRE() (Dan)
+  - Going through discussions
+  - Pending v2?
+* Using full data transfer only when offset is 0 (Ming)
+  - Waiting on Jonathan to hear back from consortium on spec language interpretation
+* Initialize eiw and eig (Purva)
+  - Pending v2
+* Low Mem Hole (Fabio)
+  - Waiting on ECN to post next rev
+* Zen5 translate part 2 (Robert)
+  - pending next rev?
+  - ECN?
+* CXL reset support for devices. (Srirangan)
+  - Pending v3
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending v3
+* (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Needs review and will need an ECN or the like also.
+
 ## v6.18 and beyond
+* DCD (Ira)
+  - v9 posted, still waiting for a use case
+* vfio-cxl type 2 (Zhi)
+* Hotness Driver (Jonathan)
+* non-x86 cache flushing ("wbinv") (Jonathan)
 
 
 # May 2025
