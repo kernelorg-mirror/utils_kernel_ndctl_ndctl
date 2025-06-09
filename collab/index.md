@@ -39,7 +39,7 @@ layout: page
 * Documentation: cxl: fix typos and improve clarity in memory-devices.rst
 * cxl/pci: Replace mutex_lock_io() w mutex_lock() for mailbox access
 * cxl_test: Limit location for fake CFMWS to mappable range
-* Fix the min_scrub_cycle of a region miscalculation (Ming)
+* Fix the min_scrub_cycle of a region miscalculation
 
 ### cxl/next targets
 * Type2 device support (Alejandro)
