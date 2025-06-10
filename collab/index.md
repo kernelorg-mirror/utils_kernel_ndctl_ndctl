@@ -23,6 +23,37 @@ layout: page
 
 ## Opens
 * CXL device life time (Dan)
+  * <recorded video>
+
+* John Groves -- firmware download/activate issue
+  * Can't (may not) complete within 2sec timeout - want to run as background cmd
+  * revive background abort cmd patch?
+    * 10 sec is upper bound for what they need
+    * If abort - what state does that leave the card
+      * unknown
+    * device is still working during download/flash
+    * orig patch was for user space cmds -> was racy
+    * this use case might be ok
+  * mainly need to ensure that the state returned is correct
+  * Spec says one can return background command started - for firmware activate
+  * can't support background in general.  lose communication
+  * This is a true background operation
+  * hardware with abort does not need a timeout but need one if the hardware does not support abort
+  * could fw activate be a state to poll?
+    * would require a new opcode
+  * abort seems messy
+  * you still need to reset so no need to abort just wait and reset
+  * there is at least 1 cmd which polls to avoid background abort
+  * there is no reason to abort until another command comes
+  * this is user triggered
+  * Jonathan handle this with Davidlohr because the device supports abort
+    * New device would need a new mechanism - like sanitize
+  * Dan prefers a forground operation which just polls for completion
+    * would need a new status poll (not generic background)
+  * Alternate we extend the timeout for firmware update to 1 min (eternity...)
+  * wait in the shutdown flow?
+  * Patch set comming w/ Davidlohr's set (regiggered)
+
 
 ## cxl-cli
 * v82 release expected only include what is in pending today.[1]
@@ -31,6 +62,16 @@ layout: page
 
 
 ## QEMU
+* FMAPI related stuff going on
+  * FMAPI over USB working
+  * should be easier to test with this
+* phys switch port control stuff
+* CHMU is up on gitlab
+  * nearly feature complete
+* some arm support
+  * reference machine model but machine may not be maintained
+  * feedback from arm/qemu maintainers needed
+
 
 ## v6.16 rc fixes (Applied to cxl/fixes)
 * fix return value in cxlctl_validate_set_features()
@@ -42,25 +83,50 @@ layout: page
 * cxl/pci: Replace mutex_lock_io() w mutex_lock() for mailbox access
 * cxl_test: Limit location for fake CFMWS to mappable range
 * Fix the min_scrub_cycle of a region miscalculation
+  * why not 6.16?
+  * obscure but is a bug
+  * will move to 6.16
 
 ### cxl/next targets
 * Type2 device support (Alejandro)
   - Pending v17
+  - 2 issues
+    - conflicts Dan pointed out
+    - problems with accelerators call with objects which are not there
+  - pio buffers are in CXL - lower latency
+  - could there be a call back to say the mem device is comming down out from under the accelerator?
+    - where could this come from?  perhaps cxl module removal?
+    - link go down?
+  - talk offline with Dan
+  - make gross/violent but safe then clean up later
 * Add managed SOFT RESERVE resource handling (Smita)
   - Pending v5
 * Enable CXL PCIe port protocol error handling and logging (Terry)
-  - Pending v10
+  - Pending v10 - end of the week...
+    - will revisit locks/reference counts
   - Will need to get new Bjorn tags.
 * Delayed port enumeration (Dave)
   - Pending v4
   - Need to consider Robert's request of providing dport port_num via sysfs
+    - What is the reason to require this?
+      - very hard to debug without this
+      - can't we export hardware ID?
+        - can't because they are not struct device...
+        - make them devices?
+        - surface on PCI device?  (wrong pci device)
+      - allocate the dports at the time we are numbering the ports
+        - Dave will revisit this
 * Remove core/acpi.c (Dave)
   - Pending v2
+  - v3 posted - please review
 * Introduce DEFINE_ACQUIRE() (Dan)
   - Going through discussions
   - Pending v2?
+  - v2 will come with Peter Z's suggestions
 * Using full data transfer only when offset is 0 (Ming)
   - Waiting on Jonathan to hear back from consortium on spec language interpretation
+  - Jonathan will have a look
+  - John G to look too
 * Initialize eiw and eig (Purva)
   - Pending v2
 * Low Mem Hole (Fabio)
@@ -68,6 +134,8 @@ layout: page
 * Zen5 translate part 2 (Robert)
   - pending next rev?
   - ECN?
+  - trying to combine with extended linear caching code already upstream
+  - remove platform specific changes - make more generic
 * CXL reset support for devices. (Srirangan)
   - Pending v3
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
@@ -78,9 +146,15 @@ layout: page
 ## v6.18 and beyond
 * DCD (Ira)
   - v9 posted, still waiting for a use case
+  - Jonathan - patch set still applies
+  - Dan's apetite for having a sparse device dax is limited
+    - don't want this to become another 'hugetlbfs'
+  - have another call outside the colab meeting
 * vfio-cxl type 2 (Zhi)
 * Hotness Driver (Jonathan)
+  - split the work...
 * non-x86 cache flushing ("wbinv") (Jonathan)
+  - don't have a user space ABI so use a kref...
 
 
 # May 2025
