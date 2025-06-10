@@ -22,6 +22,8 @@ layout: page
 * v6.18 and beyond
 
 ## Opens
+* CXL device life time (Dan)
+
 ## cxl-cli
 * v82 release expected only include what is in pending today.[1]
   Any patches left out, are either pending an update or lack Reviewed-by tag.
@@ -62,7 +64,7 @@ layout: page
 * Initialize eiw and eig (Purva)
   - Pending v2
 * Low Mem Hole (Fabio)
-  - Waiting on ECN to post next rev
+  - Creating CXL convention doc
 * Zen5 translate part 2 (Robert)
   - pending next rev?
   - ECN?
