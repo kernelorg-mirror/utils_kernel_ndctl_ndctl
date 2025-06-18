@@ -275,6 +275,7 @@ foreach t : tests
       dax_errors,
       daxdev_errors,
       dax_dev,
+      fwctl,
       mmap,
     ],
     suite: t[2],
