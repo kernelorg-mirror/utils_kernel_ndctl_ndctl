@@ -20,7 +20,7 @@ MIN_AVAIL=$((TEST_SIZE*4))
 MAX_NS=10
 NAME="subsection-test"
 
-ndctl list -N | jq -r ".[] | select(.name==\"subsection-test\") | .dev"
+$NDCTL list -N | jq -r ".[] | select(.name==\"subsection-test\") | .dev"
 
 rc=$FAIL
 cleanup() {
