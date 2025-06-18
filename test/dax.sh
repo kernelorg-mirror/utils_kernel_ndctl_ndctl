@@ -43,7 +43,7 @@ run_test() {
 			fi
 		fi
 		count=$((count + 1))
-	done < <(trace-cmd report | awk '{ print $21 }')
+	done < <(trace-cmd report | grep dax_pmd_fault_done | awk '{ print $NF }')
 
 	if [ $count -lt 10 ]; then
 		cleanup "$1"
