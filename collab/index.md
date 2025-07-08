@@ -34,7 +34,7 @@ layout: page
 * ndctl: v2 Add error injection support (BenC)
   - Needs review
 * cxl: Add helper function to verify port is in memdev hierarchy (DaveJ)
-  - ???
+  - next rev pending
 * test: fail on unexpected kernel error & warning, not just "Call Trace" (MarcH)
   - Needs review
 * test/cxl-poison.sh: test inject and clear poison by HPA (AlisonS)
@@ -49,6 +49,30 @@ layout: page
   - Deferred but not forgotten
 
 ## QEMU
+* QEMU 10.1 soft freeze is on the 15th July (1 week from today).
+Queued up waiting for Michael Tsirkin to get to:
+  - FM-API DCD support (Anisa)
+Waiting for ARM maintainers
+  - ARM-virt - one open question around the address space allocator used for RCRBs.
+
+In good state so maybe if we get enough review we can try to slip in late
+this week:  (please review!)
+- 3.2 Event injection updates (Shiju)
+- Maintenance commands (Davidlohr and Shiju)
+
+Longer term stuff
+- Interest in an upstream MHD implementation, so revisit inter 'host'
+  communication path (Gregory)
+- MCTP over USB - worked for Anisa so need to resolve remaining issues
+  (MTU not being respected from device to host) and separate from
+  stalled MCTP over I2C
+- CHMU.  Works etc, but little point in upstreaming yet.
+- ARM SBSA reference platform support (separate RC) - Waiting for SBSA
+  and PCI maintainers to review.
+- Performance path for non interleaved case. Useful, needs cleaning up
+  and tear down support -> Similar support needed for virtualized DCD.
+- Various other sets awaiting new versions.
+
 
 ## v6.16 rc fixes
 * rc4 PR with some fixes
@@ -96,13 +120,18 @@ layout: page
 ## v6.18 and beyond
 * CXL Nvdimm labels (Neeraj)
 - RFC going through reviews
+
+* Hotness Driver (Jonathan)
+not revisited since last meeting - need to repost with cleaner solution for register mapping in core driver.  CHMU is the first regloc addressed thing that has hugely variable size so need to go poke inside to find out how big it is.
+
+* non-x86 cache flushing ("wbinv") (Jonathan)
+Cache flushing for non x86.  Descended into a discussion of problems with use of WBINVD on x86 so little useful discussion of what the set actually does. Some minor issues so I'll do a v3 late this week (seems unlikely to make 6.17!) Review welcome.
+
 * DCD (Ira)
   - Anything new since June?
+
 * vfio-cxl type 2 (Zhi)
   - Still pending v2 RFC
-* Hotness Driver (Jonathan)
-* non-x86 cache flushing ("wbinv") (Jonathan)
-
 
 # June 2025
 * Opens
