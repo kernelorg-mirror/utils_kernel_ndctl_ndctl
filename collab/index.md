@@ -22,6 +22,11 @@ layout: page
 * v6.18 and beyond
 
 ## Opens
+- JohnG: wrt dax device w dax extents, hope to get a smaller
+  group call. Ira going to do a poll to select time and set up.
+- JohnG: famfs v2 patches, need to fixup dax, heads up need dax developer help
+- DavidLohr: Background handling discussions ongoing. More feedback welcome.
+
 
 ## CXL CLI
 * NDCTL v82 was released June 12
@@ -49,6 +54,9 @@ layout: page
   - Deferred but not forgotten
 
 ## QEMU
+
+Jonathan not in mtg. DaveJ covering...
+
 * QEMU 10.1 soft freeze is on the 15th July (1 week from today).
 Queued up waiting for Michael Tsirkin to get to:
   - FM-API DCD support (Anisa)
@@ -95,9 +103,9 @@ Longer term stuff
 * Add managed SOFT RESERVE resource handling (Smita)
   - Pending v5
 * Enable CXL PCIe port protocol error handling and logging (Terry)
-  - v10 going through reviews
+  - v10 going through reviews, v11 in the works
 * Delayed dport creation (Dave)
-  - v5 going through review 
+  - v5 going through review, v6 in the works
 * Introduce DEFINE_ACQUIRE() (Dan)
   - Pending v2
   - Immutable branch for definition patch on cxl git
@@ -105,8 +113,10 @@ Longer term stuff
   - Pending v2
 * Low Mem Hole (Fabio)
   - Posted CXL convention doc, going through review
+  - new rev in the works
 * Zen5 translate part 2 (Robert)
-  - next rev WIP?
+  - expect revs to roll out with functionality in chunks like:
+    region code refactor + rework extended linear cache + zen5 code
 * CXL reset support for devices. (Srirangan)
   - Pending v3
 * cxl: Support Poison Inject & Clear by Region Offset (Alison)
@@ -116,7 +126,7 @@ Longer term stuff
 * (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
   - Pending v1
 * Make ELOG and GHES log and trace consistently (Fabio)
-  - v4 going through reviews
+  - Pending v5 with updates per Jonathans review
 
 ## v6.18 and beyond
 * CXL Nvdimm labels (Neeraj)
