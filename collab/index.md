@@ -75,9 +75,10 @@ Longer term stuff
 
 
 ## v6.16 rc fixes
-* rc4 PR with some fixes
-* CXL Feature: Using full data transfer only when offset is 0
+* rc4 PR with some fixes accepted
+* CXL Feature: Using full data transfer only when offset is 0 (Ming)
   - Waiting on Jonathan to inquire spec clarification with the consortium
+* Fix wrong dpa checking in PPR operation (Ming)
 
 ## v6.17 merge window in cxl/next
 * Documentation/driver-api/cxl: Introduce conventions.rst
