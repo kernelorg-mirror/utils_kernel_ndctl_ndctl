@@ -24,6 +24,29 @@ layout: page
 ## Opens
 
 ## CXL CLI
+* NDCTL v82 was release June 12
+  https://github.com/pmem/ndctl/releases/tag/v82
+* Patch Queue for v83:
+* ndctl: Add missing test dependencies and other fixups (DanW)
+  - Set applied to pending
+* Introduce sanitize-memdev functionality (DavidLohrB)
+  - Received a couple of it "works for me" replies but no review tags.
+* ndctl: v2 Add error injection support (BenC)
+  - Needs review
+* cxl: Add helper function to verify port is in memdev hierarchy (DaveJ)
+  - ???
+* test: fail on unexpected kernel error & warning, not just "Call Trace" (MarcH)
+  - Needs review
+* test/cxl-poison.sh: test inject and clear poison by HPA (AlisonS)
+  - Pending a v2 with added cases but reviews still welcome on v1.
+* Documentation: cxl,daxctl,ndctl add --list-cmds info (RongT)
+  - Pending Alison to apply - is good.
+*  test/monitor.sh: replace sleep with event driven wait (AlisonS)
+  - Pending a v4
+* ndctl: Various typos fix in Documention/, cxl/, ndctl/, ... (YiZ)
+  - Pending a v3
+* ndctl: Dynamic Capacity additions for cxl-cli (IraW)
+  - Deferred but not forgotten
 
 ## QEMU
 
@@ -62,11 +85,11 @@ layout: page
 * CXL reset support for devices. (Srirangan)
   - Pending v3
 * cxl: Support Poison Inject & Clear by Region Offset (Alison)
-  - v2 going through review  
+  - Pending v3 w Jonathans feedback, but more v2 comments welcome
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   - Pending v3
 * (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
-  - Needs review and will need an ECN or the like also.
+  - Pending v1
 * Make ELOG and GHES log and trace consistently (Fabio)
   - v4 going through reviews
 
