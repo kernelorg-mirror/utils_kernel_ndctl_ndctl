@@ -24,7 +24,7 @@ layout: page
 ## Opens
 
 ## CXL CLI
-* NDCTL v82 was release June 12
+* NDCTL v82 was released June 12
   https://github.com/pmem/ndctl/releases/tag/v82
 * Patch Queue for v83:
 * ndctl: Add missing test dependencies and other fixups (DanW)
@@ -41,7 +41,7 @@ layout: page
   - Pending a v2 with added cases but reviews still welcome on v1.
 * Documentation: cxl,daxctl,ndctl add --list-cmds info (RongT)
   - Pending Alison to apply - is good.
-*  test/monitor.sh: replace sleep with event driven wait (AlisonS)
+* test/monitor.sh: replace sleep with event driven wait (AlisonS)
   - Pending a v4
 * ndctl: Various typos fix in Documention/, cxl/, ndctl/, ... (YiZ)
   - Pending a v3
