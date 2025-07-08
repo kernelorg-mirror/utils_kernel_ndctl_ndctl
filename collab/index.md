@@ -13,6 +13,74 @@ layout: page
 * Do follow-up on linux-cxl@vger.kernel.org for longer questions / debug
 * https://pmem.io/ndctl/collab/
 
+# July 2025
+* Opens
+* cxl-cli
+* QEMU
+* v6.16 rc fixes
+* v6.17 merge window
+* v6.18 and beyond
+
+## Opens
+
+## CXL CLI
+
+## QEMU
+
+## v6.16 rc fixes
+* rc4 PR with some fixes
+* CXL Feature: Using full data transfer only when offset is 0
+  - Waiting on Jonathan to inquire spec clarification with the consortium
+
+## v6.17 merge window in cxl/next
+* Documentation/driver-api/cxl: Introduce conventions.rst
+* Documentation: cxl: fix typos and improve clarity in memory-devices.rst
+* cxl/pci: Replace mutex_lock_io() w mutex_lock() for mailbox access
+* cxl_test: Limit location for fake CFMWS to mappable range
+* cxl/EDAC: use correct format specifier for u32 value
+* make cxl_bus_type constant
+* Remove core/acpi.c and ACPI dependency on the core for extended linear cache size
+
+## v6.17 merge window pending review
+* Type2 device support (Alejandro)
+  - v17 going through reviews
+* Add managed SOFT RESERVE resource handling (Smita)
+  - Pending v5
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  - v10 going through reviews
+* Delayed dport creation (Dave)
+  - v5 going through review 
+* Introduce DEFINE_ACQUIRE() (Dan)
+  - Pending v2
+  - Immutable branch for definition patch on cxl git
+* Initialize eiw and eig (Purva)
+  - Pending v2
+* Low Mem Hole (Fabio)
+  - Posted CXL convention doc, going through review
+* Zen5 translate part 2 (Robert)
+  - next rev WIP?
+* CXL reset support for devices. (Srirangan)
+  - Pending v3
+* cxl: Support Poison Inject & Clear by Region Offset (Alison)
+  - v2 going through review  
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending v3
+* (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Needs review and will need an ECN or the like also.
+* Make ELOG and GHES log and trace consistently (Fabio)
+  - v4 going through reviews
+
+## v6.18 and beyond
+* CXL Nvdimm labels (Neeraj)
+- RFC going through reviews
+* DCD (Ira)
+  - Anything new since June?
+* vfio-cxl type 2 (Zhi)
+  - Still pending v2 RFC
+* Hotness Driver (Jonathan)
+* non-x86 cache flushing ("wbinv") (Jonathan)
+
+
 # June 2025
 * Opens
 * cxl-cli
