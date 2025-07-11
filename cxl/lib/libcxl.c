@@ -2024,6 +2024,37 @@ CXL_EXPORT int cxl_memdev_nvdimm_bridge_active(struct cxl_memdev *memdev)
 	return is_enabled(path);
 }
 
+CXL_EXPORT bool cxl_memdev_is_port_ancestor(struct cxl_memdev *memdev,
+					    struct cxl_port *port)
+{
+	const char *uport = cxl_port_get_host(port);
+	const char *start = "devices";
+	const char *pstr = "platform";
+	char *host, *pos;
+
+	host = strdup(memdev->host_path);
+	if (!host)
+		return false;
+
+	pos = strstr(host, start);
+	pos += strlen(start) + 1;
+	if (strncmp(pos, pstr, strlen(pstr)) == 0)
+		pos += strlen(pstr) + 1;
+	pos = strtok(pos, "/");
+
+	while (pos) {
+		if (strcmp(pos, uport) == 0) {
+			free(host);
+			return true;
+		}
+		pos = strtok(NULL, "/");
+	}
+
+	free(host);
+
+	return false;
+}
+
 static int cxl_port_init(struct cxl_port *port, struct cxl_port *parent_port,
 			 enum cxl_port_type type, struct cxl_ctx *ctx, int id,
 			 const char *cxlport_base)

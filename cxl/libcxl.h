@@ -179,6 +179,9 @@ bool cxl_dport_maps_memdev(struct cxl_dport *dport, struct cxl_memdev *memdev);
 struct cxl_dport *cxl_port_get_dport_by_memdev(struct cxl_port *port,
 					       struct cxl_memdev *memdev);
 
+bool cxl_memdev_is_port_ancestor(struct cxl_memdev *memdev,
+				 struct cxl_port *port);
+
 #define cxl_dport_foreach(port, dport)                                         \
 	for (dport = cxl_dport_get_first(port); dport != NULL;                 \
 	     dport = cxl_dport_get_next(dport))

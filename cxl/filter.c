@@ -564,7 +564,7 @@ static bool __memdev_filter_by_port(struct cxl_memdev *memdev,
 	struct cxl_endpoint *endpoint;
 
 	if (util_cxl_port_filter(port, port_ident, CXL_PF_SINGLE) &&
-	    cxl_port_get_dport_by_memdev(port, memdev))
+	    cxl_memdev_is_port_ancestor(memdev, port))
 		return true;
 
 	cxl_endpoint_foreach(port, endpoint)

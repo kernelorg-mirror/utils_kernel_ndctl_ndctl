@@ -295,3 +295,8 @@ global:
 	cxl_fwctl_get_major;
 	cxl_fwctl_get_minor;
 } LIBECXL_8;
+
+LIBCXL_10 {
+global:
+	cxl_memdev_is_port_ancestor;
+} LIBCXL_9;

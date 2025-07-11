@@ -67,7 +67,7 @@ static int action_disable(struct cxl_port *port)
 	}
 
 	cxl_memdev_foreach(ctx, memdev) {
-		if (!cxl_port_get_dport_by_memdev(port, memdev))
+		if (!cxl_memdev_is_port_ancestor(memdev, port))
 			continue;
 		if (cxl_memdev_is_enabled(memdev))
 			active_memdevs++;
@@ -102,7 +102,7 @@ static int action_enable(struct cxl_port *port)
 		return rc;
 
 	cxl_memdev_foreach(ctx, memdev)
-		if (cxl_port_get_dport_by_memdev(port, memdev))
+		if (cxl_memdev_is_port_ancestor(memdev, port))
 			cxl_memdev_enable(memdev);
 	return 0;
 }
