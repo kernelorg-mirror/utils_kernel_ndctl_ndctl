@@ -4,7 +4,7 @@
 # Global variables
 
 # NDCTL
-if [ -z $NDCTL ]; then
+if [ -z "$NDCTL" ]; then
 	if [ -f "../ndctl/ndctl" ] && [ -x "../ndctl/ndctl" ]; then
 		export NDCTL=../ndctl/ndctl
 	elif [ -f "./ndctl/ndctl" ] && [ -x "./ndctl/ndctl" ]; then
@@ -16,7 +16,7 @@ if [ -z $NDCTL ]; then
 fi
 
 # DAXCTL
-if [ -z $DAXCTL ]; then
+if [ -z "$DAXCTL" ]; then
 	if [ -f "../daxctl/daxctl" ] && [ -x "../daxctl/daxctl" ]; then
 		export DAXCTL=../daxctl/daxctl
 	elif [ -f "./daxctl/daxctl" ] && [ -x "./daxctl/daxctl" ]; then
@@ -28,7 +28,7 @@ if [ -z $DAXCTL ]; then
 fi
 
 # CXL
-if [ -z $CXL ]; then
+if [ -z "$CXL" ]; then
 	if [ -f "../cxl/cxl" ] && [ -x "../cxl/cxl" ]; then
 		export CXL=../cxl/cxl
 	elif [ -f "./cxl/cxl" ] && [ -x "./cxl/cxl" ]; then
@@ -39,7 +39,7 @@ if [ -z $CXL ]; then
 	fi
 fi
 
-if [ -z $TEST_PATH ]; then
+if [ -z "$TEST_PATH" ]; then
 	export TEST_PATH=.
 fi
 
@@ -103,7 +103,7 @@ check_min_kver()
 #
 do_skip()
 {
-	echo kernel $(uname -r): $1
+	echo kernel "$(uname -r)": "$1"
 	exit 77
 }
 
@@ -147,7 +147,7 @@ check_dmesg()
 	# validate no WARN or lockdep report during the run
 	sleep 1
 	log=$(journalctl -r -k --since "-$((SECONDS+1))s")
-	grep -q "Call Trace" <<< $log && err $1
+	grep -q "Call Trace" <<< "$log" && err "$1"
 	true
 }
 
