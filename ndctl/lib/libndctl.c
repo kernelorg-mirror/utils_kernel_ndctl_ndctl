@@ -3184,7 +3184,7 @@ NDCTL_EXPORT struct ndctl_cmd *ndctl_dimm_cmd_new_cfg_read(struct ndctl_cmd *cfg
 
 	if (cfg_size->type != ND_CMD_GET_CONFIG_SIZE
 			|| cfg_size->status != 0) {
-		dbg(ctx, "expected sucessfully completed cfg_size command\n");
+		dbg(ctx, "expected successfully completed cfg_size command\n");
 		return NULL;
 	}
 
@@ -3275,7 +3275,7 @@ NDCTL_EXPORT struct ndctl_cmd *ndctl_dimm_cmd_new_cfg_write(struct ndctl_cmd *cf
 	/* enforce rmw */
 	if (cfg_read->type != ND_CMD_GET_CONFIG_DATA
 		       || cfg_read->status != 0) {
-		dbg(ctx, "expected sucessfully completed cfg_read command\n");
+		dbg(ctx, "expected successfully completed cfg_read command\n");
 		return NULL;
 	}
 
