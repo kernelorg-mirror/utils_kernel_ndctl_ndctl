@@ -24,6 +24,28 @@ layout: page
 ## Opens
 
 ## CXL CLI
+## NDCTL v83
+* See queue in https://github.com/pmem/ndctl/tree/pending
+  - expect September release
+
+## NDCTL v83 (maybe) and beyond:
+* Introduce sanitize-memdev functionality (DavidLohrB)
+  - Needs review
+  - Received a couple of it "works for me" replies but no review tags.
+* ndctl: v2 Add error injection support (BenC)
+  - status ?
+* test: fail on unexpected kernel error & warning, not just "Call Trace" (MarcH)
+  - Needs next rev on check dmesg piece
+  - Needs next rev on kmesg piece
+* test/cxl-poison.sh: test inject and clear poison by HPA (AlisonS)
+  - Needs review
+* cxl/test: add cxl_translate unit test (AlisonS)
+  - Needs review
+* ndctl,cxl/test: Add a common unit test for creating pmem namespaces(AlisonS)
+  - Pending a v2
+* test/monitor.sh: replace sleep with event driven wait (AlisonS)
+  - Pending a v4
+
 
 ## QEMU
 
@@ -58,9 +80,11 @@ layout: page
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   - Pending v3
 * (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
-  - Pending v1
+  - Pending v1 (was RFC)
 * Make ELOG and GHES log and trace consistently (Fabio)
   - Pending v5
+* CXL: Add a loadable module for address translation (Alison)
+  - v2 needs review
 
 * anything else missed?
 
