@@ -13,6 +13,70 @@ layout: page
 * Do follow-up on linux-cxl@vger.kernel.org for longer questions / debug
 * https://pmem.io/ndctl/collab/
 
+# September 2025
+* Opens
+* cxl-cli
+* QEMU
+* v6.17 rc fixes
+* v6.18 merge window
+* v6.19 and beyond
+
+## Opens
+
+## CXL CLI
+
+## QEMU
+
+## v6.17 rc fixes
+* None
+
+## v6.18 merge window
+* Add managed SOFT RESERVE resource handling (Smita)
+  - New patch series, v1 under review
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  - v11 going through reviews
+* Delayed dport creation (Dave)
+  - v9 needs review
+* Update CXL access coordinates to node directly (Dave)
+  - v3 needs acks from Rafael
+* Type2 device support (Alejandro)
+  - Waiting on response: https://lore.kernel.org/linux-cxl/e74a66db-6067-4f8d-9fb1-fe4f80357899@amd.com/T/#me74adadf01d65ea15b5ef92a3947f8730f06ec93
+* Low Mem Hole (Fabio)
+  - Posted CXL convention doc, going through review
+  - v4 under review
+* Zen5 translate part 2 (Robert)
+  - need review
+  - need convetion doc
+* CXL.mem error isolation support (Ben)
+  - need review
+  - Is there a pending use case?
+* CXL LSA 2.1 labeling support (Neeraj)
+  - v2 needs review and response to review comments
+* CXL reset support for devices. (Srirangan)
+  - Pending v3
+  - still active?
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending v3
+* (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - Pending v1
+* Make ELOG and GHES log and trace consistently (Fabio)
+  - Pending v5
+
+* anything else missed?
+
+## v6.19 and beyond
+* Initial CXL.cache device support (Ben)
+* Hotness Driver (Jonathan)
+* non-x86 cache flushing ("wbinv") (Jonathan)
+* DCD
+  - any new activities?
+* vfio-cxl type 2 (Zhi)
+  - Still pending v2 RFC. Abandoned?
+
+
+# August 2025
+* Skipped
+
 # July 2025
 * Opens
 * cxl-cli
