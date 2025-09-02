@@ -22,6 +22,13 @@ layout: page
 * v6.19 and beyond
 
 ## Opens
+- DanW - Early topic acceptance mid month.
+- JonathanC - Plumbers device memory microconf topic submit deadline Sept30.
+- DavidLohrB - back invalidate and cxl.cache topic plumbers proposal coming soon
+- famfs (JohnGroves) - needs to clean up issue w Alistairs dax set.
+  Dax never clears the page mapping or folio mapping. John expects
+  to send fixup. Also topic for next DCD call.
+
 
 ## CXL CLI
 ## NDCTL v83
@@ -48,6 +55,15 @@ layout: page
 
 
 ## QEMU
+- Fan support mv'd to hobby level
+- Looking for more reviewers - wonderful role, not for poor souls
+- 10.1 released
+- 10.2
+    - event record and RAS features
+    - ARM SPSA support needs reviewers
+    - a bunch more in the works
+
+
 
 ## v6.17 rc fixes
 * None
@@ -61,14 +77,18 @@ layout: page
   - v9 needs review
 * Update CXL access coordinates to node directly (Dave)
   - v3 needs acks from Rafael
+  - Update maintainers
 * Type2 device support (Alejandro)
+  - Main issues brought up by Alejandro at this link:
   - Waiting on response: https://lore.kernel.org/linux-cxl/e74a66db-6067-4f8d-9fb1-fe4f80357899@amd.com/T/#me74adadf01d65ea15b5ef92a3947f8730f06ec93
+  - Wants to address those things before posting next version
 * Low Mem Hole (Fabio)
   - Posted CXL convention doc, going through review
   - v4 under review
 * Zen5 translate part 2 (Robert)
   - need review
-  - need convetion doc
+  - need convention doc
+  - Robert gave overview on layers of patches, refactors to Zen5 support.
 * CXL.mem error isolation support (Ben)
   - need review
   - Is there a pending use case?
@@ -80,7 +100,7 @@ layout: page
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   - Pending v3
 * (RFC) Translate DPA->HPA in unaligned MOD3 regions (Alison)
-  - Pending v1 (was RFC)
+  - Pending v1
 * Make ELOG and GHES log and trace consistently (Fabio)
   - Pending v5
 * CXL: Add a loadable module for address translation (Alison)
@@ -91,11 +111,21 @@ layout: page
 ## v6.19 and beyond
 * Initial CXL.cache device support (Ben)
 * Hotness Driver (Jonathan)
+  Driver level is not critical path, what we do with hotness data in the
+  kernel level is.
 * non-x86 cache flushing ("wbinv") (Jonathan)
+  - Cache coherency management subsystem
+  - non x86 folks, please try it out.
 * DCD
-  - any new activities?
+  - next call will not be cancelled
 * vfio-cxl type 2 (Zhi)
   - Still pending v2 RFC. Abandoned?
+* cxl: Initial support for Back-Invalidate (DavidLohrB)
+* fwctl
+  - Jonathan shared update on fwctl future. A new kconfig is needed for
+    CCI switch support. These go beyond the security scope of current FWCTL.
+    Plan is to convert the commands to Features in order to utilize FWCTL.
+    Some ops will be encapsulated as a Feature commands.
 
 
 # August 2025
