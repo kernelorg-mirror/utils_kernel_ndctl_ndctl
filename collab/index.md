@@ -13,6 +13,69 @@ layout: page
 * Do follow-up on linux-cxl@vger.kernel.org for longer questions / debug
 * https://pmem.io/ndctl/collab/
 
+# October(ish) 2025
+* Opens
+* cxl-cli
+* QEMU
+* v6.18 merge window
+* v6.18 rc fixes
+* v6.19 merge window
+* v6.19 and beyond
+
+## Opens
+
+## CXL CLI
+
+## QEMU
+
+## v6.18 merge window
+* Window open this week. Will send PR end of week or early next week.
+
+## v6.18 rc fixes
+* Avoid missing port component registers setup (Ming)
+- Can use review.
+
+## v6.19 merge window
+* Add managed SOFT RESERVE resource handling (Smita)
+  - pending v2?
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  - v12 going through reviews
+* Type2 device support (Alejandro)
+  - pending v19?
+  - please review
+* Low Mem Hole (Fabio)
+  - Convention doc in cxl/next
+  - v4 under review
+* ACPI PRM Address Translation support - Zen5 (Robert)
+  - needs review
+  - needs convention doc
+  - pending v4
+* CXL LSA 2.1 labeling support (Neeraj)
+  - v3 needs review
+* CXL.mem error isolation support (Ben)
+  - Is there a pending use case?
+* CXL reset support for devices. (Srirangan)
+  - Pending v3
+  - Vishal has taken over
+* Remove devm_cxl_port_enumerate_dports() (Ming)
+  - Queued to cxl/next after merge window
+* Make ELOG and GHES log and trace consistently (Fabio)
+  - Pending v5
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  - Pending v3
+* Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  - v1 posted, need review
+* CXL: Add a loadable module for address translation (Alison)
+  - v2 needs review
+
+## v6.20 and beyond
+* Initial CXL.cache device support (Ben)
+* Hotness Driver (Jonathan)
+* non-x86 cache flushing ("wbinv") (Jonathan)
+* DCD
+* cxl: Initial support for Back-Invalidate (DavidLohrB)
+* fwctl support for CCI switch (Jonathan)
+
 # September 2025
 * Opens
 * cxl-cli
