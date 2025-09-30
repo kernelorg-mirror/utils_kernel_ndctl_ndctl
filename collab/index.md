@@ -58,7 +58,7 @@ layout: page
   - please review
 * Low Mem Hole (Fabio)
   - Convention doc in cxl/next
-  - v4 under review
+  - v5 to be posted soon
 * ACPI PRM Address Translation support - Zen5 (Robert)
   - needs review
   - needs convention doc
@@ -73,7 +73,7 @@ layout: page
 * Remove devm_cxl_port_enumerate_dports() (Ming)
   - Queued to cxl/next after merge window
 * Make ELOG and GHES log and trace consistently (Fabio)
-  - Pending v5
+  - v5 to be posted soon
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   - Pending v3
 * Translate DPA->HPA in unaligned MOD3 regions (Alison)
