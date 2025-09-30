@@ -25,6 +25,19 @@ layout: page
 ## Opens
 
 ## CXL CLI
+## NDCTL v83
+* Release is WIP, perhaps today
+  - Last commit removes libtracefs build dependency that broke v80,81,82.
+  - https://github.com/pmem/ndctl/commits/pending/
+## NDCTl v84 and beyond
+* Reviews welcome:
+  - cxl/test: add cxl-translate unit test (expect need for 6.18 kernel) (AlisonS)
+  - Introduce sanitize-memdev functionality (DavidLohrB)
+* Revisions welcome:
+  - ndctl: v2 Add error injection support (BenC)
+  - test: fail on unexpected kernel error & warning, not just "Call Trace" (MarcH)
+  - ndctl,cxl/test: Add a common unit test for creating pmem namespaces(AlisonS)
+  - test/monitor.sh: replace sleep with event driven wait (AlisonS)
 
 ## QEMU
 
@@ -37,7 +50,7 @@ layout: page
 
 ## v6.19 merge window
 * Add managed SOFT RESERVE resource handling (Smita)
-  - pending v2?
+  - v3 now available for review
 * Enable CXL PCIe port protocol error handling and logging (Terry)
   - v12 going through reviews
 * Type2 device support (Alejandro)
