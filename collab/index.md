@@ -14,6 +14,7 @@ layout: page
 * https://pmem.io/ndctl/collab/
 
 # October(ish) 2025
+
 * Opens
 * cxl-cli
 * QEMU
@@ -23,13 +24,20 @@ layout: page
 * v6.19 and beyond
 
 ## Opens
+* John Groves - submitting plumbers topics:
+- DCD: the namespace for composable memory.
+- FAMFS Update - DAX challenges and use cases
+- John Groves to post a detailed decription of DAX issues w FAMFS.
+- VishalA working a patch to not fail on 0 size committed and locked decoders
+- DaveJ asks that you base patches on the RC that cxl/next is based upon, not upon cxl/next directly. Include the base commit in the patch. Comment non-compliance ;)
 
 ## CXL CLI
 ## NDCTL v83
 * Release is WIP, perhaps today
   - Last commit removes libtracefs build dependency that broke v80,81,82.
   - https://github.com/pmem/ndctl/commits/pending/
-## NDCTl v84 and beyond
+
+## NDCTL v84 and beyond
 * Reviews welcome:
   - cxl/test: add cxl-translate unit test (expect need for 6.18 kernel) (AlisonS)
   - Introduce sanitize-memdev functionality (DavidLohrB)
@@ -40,13 +48,14 @@ layout: page
   - test/monitor.sh: replace sleep with event driven wait (AlisonS)
 
 ## QEMU
+* Features pending next release, reviews welcome.
 
 ## v6.18 merge window
 * Window open this week. Will send PR end of week or early next week.
 
 ## v6.18 rc fixes
 * Avoid missing port component registers setup (Ming)
-- Can use review.
+  - Can use review.
 
 ## v6.19 merge window
 * Add managed SOFT RESERVE resource handling (Smita)
@@ -69,7 +78,7 @@ layout: page
   - Is there a pending use case?
 * CXL reset support for devices. (Srirangan)
   - Pending v3
-  - Vishal has taken over
+  - VishalA has taken over
 * Remove devm_cxl_port_enumerate_dports() (Ming)
   - Queued to cxl/next after merge window
 * Make ELOG and GHES log and trace consistently (Fabio)
@@ -83,11 +92,20 @@ layout: page
 
 ## v6.20 and beyond
 * Initial CXL.cache device support (Ben)
+- Testing and planning a RFC-v2.
 * Hotness Driver (Jonathan)
+- DavidLohrB - are you modifying your apporach to use K promote B stuff.
+- David has a proposal to co-exist.
+- Qemu support?  Jonathan has something functional, welcomes more.
 * non-x86 cache flushing ("wbinv") (Jonathan)
+- v4 WIP, has substantial feedback from DanW. Got ACK from ARM folks.
 * DCD
+- User? IraW posted a rebase for Micron person who asked on Discord.
+- John Groves submitting plumbers topic for DCD: the namespace for composable memory.
 * cxl: Initial support for Back-Invalidate (DavidLohrB)
+- Available to review. Expect session at plumbers too.
 * fwctl support for CCI switch (Jonathan)
+
 
 # September 2025
 * Opens
