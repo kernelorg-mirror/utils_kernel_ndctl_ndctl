@@ -88,12 +88,12 @@ Convert namespace0.0 to *sector* mode
 
 `-m; --mode=`  
 - "raw": expose the namespace capacity directly with limitations. A raw
-  pmem namepace namespace does not support sector atomicity (see
-  "sector" mode below). A raw pmem namespace may have limited to no dax
-  support depending the kernel. In other words operations like
-  direct-I/O targeting a dax buffer may fail for a pmem namespace in raw
-  mode or indirect through a page-cache buffer. See "fsdax" and "devdax"
-  mode for dax operation.
+  pmem namespace does not support sector atomicity (see "sector" mode
+  below). A raw pmem namespace may have limited to no dax support
+  depending the kernel. In other words operations like direct-I/O
+  targeting a dax buffer may fail for a pmem namespace in raw mode or
+  indirect through a page-cache buffer. See "fsdax" and "devdax" mode
+  for dax operation.
 
 - "sector": persistent memory, given that it is byte addressable, does
   not support sector atomicity. The problematic aspect of sector tearing
@@ -140,7 +140,7 @@ in bytes. Otherwise it defaults to the maximum size specified by
 platform firmware. This option supports the suffixes "k" or "K" for KiB,
 "m" or "M" for MiB, "g" or "G" for GiB and "t" or "T" for TiB.
 
-    For pmem namepsaces the size must be a multiple of the
+    For pmem namespaces the size must be a multiple of the
     interleave-width and the namespace alignment (see
     below).
 

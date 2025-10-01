@@ -289,7 +289,7 @@ use generic port APIs on root objects.
 Ports are hierarchical. All but the a root object have another CXL port
 as a parent object retrievable via cxl_port_get_parent().
 
-The root port of a hiearchy can be retrieved via any port instance in
+The root port of a hierarchy can be retrieved via any port instance in
 that hierarchy via cxl_port_get_bus().
 
 The host of a port is the corresponding device name of the PCIe Root
@@ -341,10 +341,16 @@ CXL / PCIe host bridge.
     struct cxl_dport *cxl_dport_get_next(struct cxl_dport *dport);
     struct cxl_dport *cxl_port_get_dport_by_memdev(struct cxl_port *port,
                                                    struct cxl_memdev *memdev);
+    bool cxl_memdev_is_port_ancestor(struct cxl_memdev *memdev,
+                     struct cxl_port *port);
 
     #define cxl_dport_foreach(port, dport)                                     \
            for (dport = cxl_dport_get_first(port); dport != NULL;              \
                 dport = cxl_dport_get_next(dport))
+
+cxl_port_get_dport_by_memdev() is only usable when the memdev driver is
+bound and therefore the ports and dports in between the root port and
+the endpoint are enumerated.
 
 #### DPORT: Attributes
 

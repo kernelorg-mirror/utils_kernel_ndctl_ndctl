@@ -34,6 +34,13 @@ Try to enable descendant memdevs after enabling the port. Recall that a
 memdev is only enabled after all CXL ports in its device topology
 ancestry are enabled.
 
+    Note: The '-m' option requires release v83 or newer when used with
+    kernel v6.18 or later. Older releases (before v83) will not work
+    because kernel v6.18 changed how CXL ports and downstream ports are
+    enumerated. In these newer kernels, the CXL port hierarchy is only
+    established once the memdev is probed. v83 and later remain fully
+    compatible with both older and newer kernels.
+
 <!-- -->
 
 `--debug`  

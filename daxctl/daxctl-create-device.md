@@ -61,7 +61,7 @@ daxctl-create-device - Create a devdax device
 # DESCRIPTION
 
 Creates dax device in *devdax* mode in dynamic regions. The resultant
-can also be convereted to the *system-ram* mode which arranges for the
+can also be converted to the *system-ram* mode which arranges for the
 dax range to be hot-plugged into the system as regular memory.
 
 *daxctl create-device* expects that the BIOS or kernel defines a range

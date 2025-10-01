@@ -424,7 +424,7 @@ region and is the absolute device DPA when listing by memdev. "source:"
 is one of: External, Internal, Injected, Vendor Specific, or Unknown, as
 defined in CXL Specification v3.1 Table 8-140.
 
-<!-- -->
+The media-errors option is only available with *-Dlibtracefs=enabled*.
 
     # cxl list -m mem9 --media-errors -u
     {
