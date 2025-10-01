@@ -4,7 +4,7 @@ Utility library for managing the libnvdimm (non-volatile memory device)
 sub-system in the Linux kernel
   
 <a href="https://repology.org/project/ndctl/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/ndctl.svg" alt="Packaging status" align="right">
+  <img src="https://repology.org/badge/vertical-allrepos/ndctl.svg?exclude_unsupported=1" alt="Packaging status (exclude unsupported)" align="right">
 </a>
 
 Build
