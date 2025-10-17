@@ -994,6 +994,16 @@ struct json_object *util_cxl_region_to_json(struct cxl_region *region,
 			json_object_object_add(jregion, "size", jobj);
 	}
 
+	val = cxl_region_get_extended_linear_cache_size(region);
+	if (val > 0) {
+		jobj = util_json_object_size(val, flags);
+		if (jobj) {
+			json_object_object_add(jregion,
+					       "extended_linear_cache_size",
+					       jobj);
+		}
+	}
+
 	if (mode != CXL_DECODER_MODE_NONE) {
 		jobj = json_object_new_string(cxl_decoder_mode_name(mode));
 		if (jobj)

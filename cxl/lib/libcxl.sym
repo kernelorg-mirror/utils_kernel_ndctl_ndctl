@@ -300,3 +300,8 @@ LIBCXL_10 {
 global:
 	cxl_memdev_is_port_ancestor;
 } LIBCXL_9;
+
+LIBCXL_11 {
+global:
+	cxl_region_get_extended_linear_cache_size;
+} LIBCXL_10;

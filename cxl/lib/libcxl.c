@@ -585,6 +585,10 @@ static void *add_cxl_region(void *parent, int id, const char *cxlregion_base)
 	else
 		region->size = strtoull(buf, NULL, 0);
 
+	sprintf(path, "%s/extended_linear_cache_size", cxlregion_base);
+	if (sysfs_read_attr(ctx, path, buf) == 0)
+		region->cache_size = strtoull(buf, NULL, 0);
+
 	sprintf(path, "%s/resource", cxlregion_base);
 	if (sysfs_read_attr(ctx, path, buf) == 0)
 		resource = strtoull(buf, NULL, 0);
@@ -742,6 +746,12 @@ CXL_EXPORT void cxl_region_get_uuid(struct cxl_region *region, uuid_t uu)
 CXL_EXPORT unsigned long long cxl_region_get_size(struct cxl_region *region)
 {
 	return region->size;
+}
+
+CXL_EXPORT unsigned long long
+cxl_region_get_extended_linear_cache_size(struct cxl_region *region)
+{
+	return region->cache_size;
 }
 
 CXL_EXPORT unsigned long long cxl_region_get_resource(struct cxl_region *region)
