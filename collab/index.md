@@ -15,6 +15,128 @@ layout: page
 
 * https://pmem.io/ndctl/collab/
 
+# October 28, 2025
+
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v6.18 rc fixes
+* v6.19 merge window
+* v6.19 and beyond
+
+## Opens
+* Zero sized decoder enumeration (Alison)
+
+## CXL CLI
+
+## QEMU
+
+## v6.18 rc fixes
+* A number of fixes for 6.18-rc2 merged. Mostly extended linear cache related.
+* Generic Initiator device handle fix (Shuai)
+  - Queued
+
+## v6.19 merge window
+* Will start cxl/next on 6.18-rc4 next week. Below are ready to be queued
+  - Remove page-allocator quirk section for CXL doc (Gregory)
+  - Remove devm_cxl_port_enumerate_dports (Ming)
+  - Fix typo in cdat.c (Alok)
+  - Add a loadable module for address translation series (Alison)
+
+* Add managed SOFT RESERVE resource handling (Smita)
+  https://lore.kernel.org/linux-cxl/aQAmhrS3Im21m_jw@aschofie-mobl2.lan/T/#t
+  - v3 discussion on going
+  - Pending v4
+
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  https://lore.kernel.org/linux-cxl/20250925223440.3539069-1-terry.bowman@amd.com/T/#t
+  - Pending v13
+
+* Type2 device support (Alejandro)
+  https://lore.kernel.org/linux-cxl/9a3eed68-9394-4f87-a204-4f2a0caf496e@intel.com/T/#t
+  - v19 review on going
+  - Now has dependency on Terry's protocol error set
+  - Pending v20
+  - Can use a check from Dan
+
+* Low Mem Hole (Fabio)
+  https://lore.kernel.org/linux-cxl/20251006155836.791418-1-fabio.m.de.francesco@linux.intel.com/T/#t
+  - Convention doc in cxl/next
+  - v5 review on going
+  - kbot fixes needed for v6
+  - cxl_test support discussion on going
+
+* ACPI PRM Address Translation support - Zen5 (Robert)
+  https://lore.kernel.org/linux-cxl/aNITd1fXcBxKM5mF@gourry-fedora-PF4VCD3F/T/#t
+  - needs convention doc
+  - pending v4
+
+* CXL LSA 2.1 labeling support (Neeraj)
+  https://lore.kernel.org/linux-cxl/aNMnmdOY4g5PRpxY@aschofie-mobl2.lan/T/#t
+  - pending v4
+  - Can use some review
+
+* Support zero sized decoder (Vishal A)
+  https://lore.kernel.org/linux-cxl/20251015024019.1189713-1-vaslot@nvidia.com/T/#t
+  - pending v2
+
+* Add handling of locked CXL decoders (Dave)
+  https://lore.kernel.org/linux-cxl/637292ff-0cca-41bd-8ce9-4e38d6b1ff1b@intel.com/T/#t
+  - review on going
+
+* hmat_register_target() lockdep issue (Dave)
+  https://lore.kernel.org/linux-cxl/20251017212105.4069510-1-dave.jiang@intel.com/T/#t
+  - v3 review on going
+
+* Add support to indicate extended linear cache is present via sysfs attribute (Dave)
+  https://lore.kernel.org/linux-cxl/20251028144125.0000133b@huawei.com/T/#t
+  - v3 review on going
+
+* Adjust extended linear cache failure emission (Dave)
+  https://lore.kernel.org/linux-cxl/20251003185509.3215900-1-dave.jiang@intel.com/
+  - v2 needs review
+
+* Support multi-level interleaving with smaller granularities for lower levels (Robert)
+  https://lore.kernel.org/linux-cxl/20251028094754.72816-1-rrichter@amd.com/
+  - needs review
+
+* Make ELOG and GHES log and trace consistently (Fabio)
+  https://lore.kernel.org/linux-cxl/SJ1PR11MB60836FB0D4D8EE564759F7E3FCFCA@SJ1PR11MB6083.namprd11.prod.outlook.com/T/#t
+  - v6 review on going
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
+
+* Translate DPA->HPA in unaligned MOD3 regions (Alison)
+  https://lore.kernel.org/linux-cxl/20251014062850.727428-1-alison.schofield@intel.com/
+  - Pending v3
+
+* Coherent Cache Management System (Jonathan)
+  https://lore.kernel.org/linux-cxl/20251023133136.00006cdd@huawei.com/T/#t
+  - pending v5
+  - Will go through ARM SOC tree
+
+* CXL.mem error isolation support (Ben)
+  https://lore.kernel.org/linux-cxl/20250730214718.10679-1-Benjamin.Cheatham@amd.com/T/#t
+  - Review on going
+  - No expected user yet
+
+* CXL reset support for devices. (Srirangan / Vishal A)
+  https://lore.kernel.org/linux-cxl/20250221043906.1593189-1-smadhavan@nvidia.com/
+  - Pending v3
+  - VishalA has taken over
+
+## v6.20 and beyond
+* Initial CXL.cache device support (Ben)
+  - Testing and planning a RFC-v2.
+* Initial support for Back-Invalidate (DavidLohrB)
+* Hotness Driver (Jonathan)
+* DCD
+  - Continue to wait for an upstream user to take over
+* fwctl support for CCI switch (Jonathan)
+
 # October(ish) 2025
 
 * Opens
