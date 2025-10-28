@@ -26,7 +26,16 @@ layout: page
 * v6.19 and beyond
 
 ## Opens
-
+* FAMFS JohnG
+  - Adding sw managed cache coherency, leveraging libpmem?
+  - Jonathan - caution about archs that do not describe CXL
+    flush behavior because CXL did not exist.
+* GregP lead discussion of new Anon ZONE_DEVICE allocator
+  - whether it should use existing DAX + memory_hotplug
+  - whether it should use something like hugetlb allocator
+  - whether pgmap->alloc_folio makes sense
+  - whether existing buddy-allocator could be extended for "arenas"
+  - Maybe will discuss more at plumbers
 
 ## CXL CLI
 ## NDCTL v83 released September 30th
@@ -45,6 +54,12 @@ layout: page
   - README.md: exclude unsupported distros from Repology badge (AlisonS)
 
 ## QEMU
+- last pull request missed some cxl changes, expect in a second set,
+  will include event, sanitize,
+- hw/cxl: Add a performant (and correct) path for the non interleaved cases.
+- DavidL sighting crash using cxl mem and vfio, running w kvm. Jonathan says
+  not supported - don't do that w kvm. No guardrails around that yet.
+
 
 ## v6.18 rc fixes
 * A number of fixes for 6.18-rc2 merged. Mostly extended linear cache related.
@@ -113,6 +128,8 @@ layout: page
 * Support multi-level interleaving with smaller granularities for lower levels (Robert)
   https://lore.kernel.org/linux-cxl/20251028094754.72816-1-rrichter@amd.com/
   - needs review
+  - platform exists, BIOS setup regions only ATM
+  - look at Alison's Allow 6 & 12 way regions on 3-way HB interleave patch
 
 * Make ELOG and GHES log and trace consistently (Fabio)
   https://lore.kernel.org/linux-cxl/SJ1PR11MB60836FB0D4D8EE564759F7E3FCFCA@SJ1PR11MB6083.namprd11.prod.outlook.com/T/#t
@@ -121,15 +138,18 @@ layout: page
 * Translate DPA->HPA in unaligned MOD3 regions (Alison)
   https://lore.kernel.org/linux-cxl/20251014062850.727428-1-alison.schofield@intel.com/
   - v2 needs review
+  - Jonathan maybe waiting for v3 w bot fix :(
 
 * Allow 6 & 12 way regions on 3-way HB interleave (Alison)
   https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
   - Pending v3
+  - look at Robert' multi-level interleave patch
 
 * Coherent Cache Management System (Jonathan)
   https://lore.kernel.org/linux-cxl/20251023133136.00006cdd@huawei.com/T/#t
   - pending v5
   - Will go through ARM SOC tree
+  - No one wants it ?
 
 * CXL.mem error isolation support (Ben)
   https://lore.kernel.org/linux-cxl/20250730214718.10679-1-Benjamin.Cheatham@amd.com/T/#t
@@ -145,12 +165,16 @@ layout: page
 * Initial CXL.cache device support (Ben)
   - Testing and planning a RFC-v2.
 * Initial support for Back-Invalidate (DavidLohrB)
+  - Has dependencies on Type2. Consider cherry-picking a couple of T2 patches
+    related to region creation if T2 not landing soon.
 * Hotness Driver (Jonathan)
 * DCD
   - Continue to wait for an upstream user to take over
+  - JohnG: most likely famfs is that first upstream user
 * fwctl support for CCI switch (Jonathan)
 
-# October(ish) 2025
+
+# September 30 2025
 
 * Opens
 * cxl-cli
