@@ -26,9 +26,23 @@ layout: page
 * v6.19 and beyond
 
 ## Opens
-* Zero sized decoder enumeration (Alison)
+
 
 ## CXL CLI
+## NDCTL v83 released September 30th
+  - https://github.com/pmem/ndctl/releases/tag/v83
+## NDCTL v84 and beyond
+* Welcoming reviews:
+  - ndctl: v2 Add error injection support (BenC)
+  - cxl/test: add cxl-translate unit test (AlisonS)
+  - Introduce sanitize-memdev functionality (DavidLohrB)
+  - Add support for extended linear cache (DaveJ)
+* Waiting revisions:
+  - test: fail on unexpected kernel error & warning, not just "Call Trace" (MarcH)
+  - test/common: document magic number CXL TEST QOS CLASS=42 (MarcH)
+  - test/monitor.sh: replace sleep with event driven wait (AlisonS)
+* Merged to pending for v84:
+  - README.md: exclude unsupported distros from Repology badge (AlisonS)
 
 ## QEMU
 
@@ -104,12 +118,12 @@ layout: page
   https://lore.kernel.org/linux-cxl/SJ1PR11MB60836FB0D4D8EE564759F7E3FCFCA@SJ1PR11MB6083.namprd11.prod.outlook.com/T/#t
   - v6 review on going
 
-* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
-  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
-  - Pending v3
-
 * Translate DPA->HPA in unaligned MOD3 regions (Alison)
   https://lore.kernel.org/linux-cxl/20251014062850.727428-1-alison.schofield@intel.com/
+  - v2 needs review
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
   - Pending v3
 
 * Coherent Cache Management System (Jonathan)
