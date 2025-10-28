@@ -64,7 +64,6 @@ layout: page
   https://lore.kernel.org/linux-cxl/20251006155836.791418-1-fabio.m.de.francesco@linux.intel.com/T/#t
   - Convention doc in cxl/next
   - v5 review on going
-  - kbot fixes needed for v6
   - cxl_test support discussion on going
 
 * ACPI PRM Address Translation support - Zen5 (Robert)
