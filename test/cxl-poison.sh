@@ -35,28 +35,14 @@ find_memdev()
 	memdev=${capable_mems[0]}
 }
 
-create_x2_region()
+find_auto_region()
 {
-	# Find an x2 decoder
-	decoder="$($CXL list -b "$CXL_TEST_BUS" -D -d root | jq -r ".[] |
-		select(.pmem_capable == true) |
-		select(.nr_targets == 2) |
-		.decoder")"
-
-	# Find a memdev for each host-bridge interleave position
-	port_dev0="$($CXL list -T -d "$decoder" | jq -r ".[] |
-		.targets | .[] | select(.position == 0) | .target")"
-	port_dev1="$($CXL list -T -d "$decoder" | jq -r ".[] |
-		.targets | .[] | select(.position == 1) | .target")"
-	mem0="$($CXL list -M -p "$port_dev0" | jq -r ".[0].memdev")"
-	mem1="$($CXL list -M -p "$port_dev1" | jq -r ".[0].memdev")"
-
-	region="$($CXL create-region -d "$decoder" -m "$mem0" "$mem1" |
-		jq -r ".region")"
-	if [[ ! $region ]]; then
-		echo "create-region failed for $decoder"
-		err "$LINENO"
-	fi
+	region="$($CXL list -b "$CXL_TEST_BUS" -R | jq -r ".[0].region")"
+	[[ -n "$region" && "$region" != "null" ]] || do_skip "no test region found"
+	mem0="$($CXL list -r "$region" --targets | jq -r ".[0].mappings[0].memdev")"
+	[[ -n "$mem0" && "$mem0" != "null" ]] || do_skip "no region target0 found"
+	mem1="$($CXL list -r "$region" --targets | jq -r ".[0].mappings[1].memdev")"
+	[[ -n "$mem1" && "$mem1" != "null" ]] || do_skip "no region target1 found"
 	echo "$region"
 }
 
@@ -153,12 +139,12 @@ test_poison_by_memdev_by_dpa()
 
 test_poison_by_region_by_dpa()
 {
-	inject_poison_sysfs "$mem0" "0x40000000"
-	inject_poison_sysfs "$mem1" "0x40000000"
+	inject_poison_sysfs "$mem0" "0"
+	inject_poison_sysfs "$mem1" "0"
 	validate_poison_found "-r $region" 2
 
-	clear_poison_sysfs "$mem0" "0x40000000"
-	clear_poison_sysfs "$mem1" "0x40000000"
+	clear_poison_sysfs "$mem0" "0"
+	clear_poison_sysfs "$mem1" "0"
 	validate_poison_found "-r $region" 0
 }
 
@@ -227,7 +213,7 @@ echo 1 > /sys/kernel/tracing/events/cxl/cxl_poison/enable
 echo 1 > /sys/kernel/tracing/tracing_on
 
 test_poison_by_memdev_by_dpa
-create_x2_region
+find_auto_region
 test_poison_by_region_by_dpa
 [ -f "/sys/kernel/debug/cxl/$region/inject_poison" ] ||
        do_skip "test cases requires inject by region kernel support"
