@@ -13,11 +13,6 @@ trap 'err $LINENO' ERR
 
 check_prereq "jq"
 
-modprobe -r cxl_test
-modprobe cxl_test
-
-rc=1
-
 # THEORY OF OPERATION: Exercise cxl-cli and cxl driver ability to
 # inject, clear, and get the poison list. Do it by memdev and by region.
 
@@ -150,9 +145,18 @@ test_poison_by_region_by_dpa()
 
 test_poison_by_region_offset()
 {
-	local base gran hpa1 hpa2
+	local base gran hpa1 hpa2 cache_size
 	base=$(cat /sys/bus/cxl/devices/"$region"/resource)
 	gran=$(cat /sys/bus/cxl/devices/"$region"/interleave_granularity)
+	cache_size=0
+
+	if [ -f "/sys/bus/cxl/devices/$region/extended_linear_cache_size" ]; then
+		cache_size=$(cat /sys/bus/cxl/devices/"$region"/extended_linear_cache_size)
+	fi
+
+	if [[ $cache_size -gt 0 ]]; then
+		base=$((base + cache_size))
+	fi
 
 	# Test two HPA addresses: base and base + granularity
 	# This hits the two memdevs in the region interleave.
@@ -162,15 +166,15 @@ test_poison_by_region_offset()
 	# Inject at the offset and check result using the hpa
 	# ABI takes an offset, but recall the hpa to check trace event
 
-	inject_poison_sysfs "$region" 0
+	inject_poison_sysfs "$region" "$cache_size"
 	check_trace_entry "$region" "$hpa1"
-	inject_poison_sysfs "$region" "$gran"
+	inject_poison_sysfs "$region" "$((gran + cache_size))"
 	check_trace_entry "$region" "$hpa2"
 	validate_poison_found "-r $region" 2
 
-	clear_poison_sysfs "$region" 0
+	clear_poison_sysfs "$region" "$cache_size"
 	check_trace_entry "$region" "$hpa1"
-	clear_poison_sysfs "$region" "$gran"
+	clear_poison_sysfs "$region" "$((gran + cache_size))"
 	check_trace_entry "$region" "$hpa2"
 	validate_poison_found "-r $region" 0
 }
@@ -207,19 +211,39 @@ test_poison_by_region_offset_negative()
 	clear_poison_sysfs "$region" "$large_offset" true
 }
 
-# Clear old trace events, enable cxl_poison, enable global tracing
-echo "" > /sys/kernel/tracing/trace
-echo 1 > /sys/kernel/tracing/events/cxl/cxl_poison/enable
-echo 1 > /sys/kernel/tracing/tracing_on
+run_poison_test()
+{
+	# Clear old trace events, enable cxl_poison, enable global tracing
+	echo "" > /sys/kernel/tracing/trace
+	echo 1 > /sys/kernel/tracing/events/cxl/cxl_poison/enable
+	echo 1 > /sys/kernel/tracing/tracing_on
 
-test_poison_by_memdev_by_dpa
-find_auto_region
-test_poison_by_region_by_dpa
-[ -f "/sys/kernel/debug/cxl/$region/inject_poison" ] ||
-       do_skip "test cases requires inject by region kernel support"
-test_poison_by_region_offset
-test_poison_by_region_offset_negative
+	test_poison_by_memdev_by_dpa
+	find_auto_region
+	test_poison_by_region_by_dpa
+	[ -f "/sys/kernel/debug/cxl/$region/inject_poison" ] ||
+		do_skip "test cases requires inject by region kernel support"
+	test_poison_by_region_offset
+	test_poison_by_region_offset_negative
+}
+
+modprobe -r cxl_test
+modprobe cxl_test
+rc=1
+run_poison_test
+
+# An ELC region first appears in the cxl_test module in 6.19
+if check_min_kver "6.19"; then
+	modprobe -r cxl_test
+	modprobe cxl_test extended_linear_cache=1
+
+	[ -f /sys/module/cxl_test/parameters/extended_linear_cache ] || \
+	do_skip "cxl_test extended_linear_cache module param not available"
+
+	rc=1
+	run_poison_test
+fi
 
 check_dmesg "$LINENO"
 
-modprobe -r cxl-test
+modprobe -r cxl_test
