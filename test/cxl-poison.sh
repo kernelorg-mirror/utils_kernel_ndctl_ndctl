@@ -20,7 +20,8 @@ find_memdev()
 {
 	readarray -t capable_mems < <("$CXL" list -b "$CXL_TEST_BUS" -M |
 		jq -r ".[] | select(.pmem_size != null) |
-		select(.ram_size != null) | .memdev")
+		select(.ram_size != null) |
+		select(.poison_injectable == true) | .memdev")
 
 	if [ ${#capable_mems[@]} == 0 ]; then
 		echo "no memdevs found for test"
@@ -41,32 +42,37 @@ find_auto_region()
 	echo "$region"
 }
 
-# When cxl-cli support for inject and clear arrives, replace
-# the writes to /sys/kernel/debug with the new cxl commands.
-
-_do_poison_sysfs()
+_do_poison()
 {
 	local action="$1" dev="$2" addr="$3"
 	local expect_fail=${4:-false}
 
-	if "$expect_fail"; then
-		if echo "$addr" > "/sys/kernel/debug/cxl/$dev/${action}_poison"; then
-			echo "Expected ${action}_poison to fail for $addr"
-			err "$LINENO"
-		fi
-	else
-		echo "$addr" > "/sys/kernel/debug/cxl/$dev/${action}_poison"
+	# Regions use sysfs, memdevs use cxl-cli commands
+	if [[ "$dev" =~ ^region ]]; then
+		local sysfs_path="/sys/kernel/debug/cxl/$dev/${action}_poison"
+		"$expect_fail" && echo "$addr" > "$sysfs_path" && err "$LINENO"
+		"$expect_fail" || echo "$addr" > "$sysfs_path"
+		return
 	fi
+
+	case "$action" in
+	inject) local cmd=("$CXL" inject-media-poison "$dev" -a "$addr") ;;
+	clear)	local cmd=("$CXL" clear-media-poison "$dev" -a "$addr") ;;
+	*)	err "$LINENO" ;;
+	esac
+
+	"$expect_fail" && "${cmd[@]}" && err "$LINENO"
+	"$expect_fail" || "${cmd[@]}"
 }
 
-inject_poison_sysfs()
+inject_poison()
 {
-	_do_poison_sysfs 'inject' "$@"
+	_do_poison 'inject' "$@"
 }
 
-clear_poison_sysfs()
+clear_poison()
 {
-	_do_poison_sysfs 'clear' "$@"
+	_do_poison 'clear' "$@"
 }
 
 check_trace_entry()
@@ -121,27 +127,27 @@ validate_poison_found()
 test_poison_by_memdev_by_dpa()
 {
 	find_memdev
-	inject_poison_sysfs "$memdev" "0x40000000"
-	inject_poison_sysfs "$memdev" "0x40001000"
-	inject_poison_sysfs "$memdev" "0x600"
-	inject_poison_sysfs "$memdev" "0x0"
+	inject_poison "$memdev" "0x40000000"
+	inject_poison "$memdev" "0x40001000"
+	inject_poison "$memdev" "0x600"
+	inject_poison "$memdev" "0x0"
 	validate_poison_found "-m $memdev" 4
 
-	clear_poison_sysfs "$memdev" "0x40000000"
-	clear_poison_sysfs "$memdev" "0x40001000"
-	clear_poison_sysfs "$memdev" "0x600"
-	clear_poison_sysfs "$memdev" "0x0"
+	clear_poison "$memdev" "0x40000000"
+	clear_poison "$memdev" "0x40001000"
+	clear_poison "$memdev" "0x600"
+	clear_poison "$memdev" "0x0"
 	validate_poison_found "-m $memdev" 0
 }
 
 test_poison_by_region_by_dpa()
 {
-	inject_poison_sysfs "$mem0" "0"
-	inject_poison_sysfs "$mem1" "0"
+	inject_poison "$mem0" "0"
+	inject_poison "$mem1" "0"
 	validate_poison_found "-r $region" 2
 
-	clear_poison_sysfs "$mem0" "0"
-	clear_poison_sysfs "$mem1" "0"
+	clear_poison "$mem0" "0"
+	clear_poison "$mem1" "0"
 	validate_poison_found "-r $region" 0
 }
 
@@ -168,15 +174,15 @@ test_poison_by_region_offset()
 	# Inject at the offset and check result using the hpa
 	# ABI takes an offset, but recall the hpa to check trace event
 
-	inject_poison_sysfs "$region" "$cache_size"
+	inject_poison "$region" "$cache_size"
 	check_trace_entry "$region" "$hpa1"
-	inject_poison_sysfs "$region" "$((gran + cache_size))"
+	inject_poison "$region" "$((gran + cache_size))"
 	check_trace_entry "$region" "$hpa2"
 	validate_poison_found "-r $region" 2
 
-	clear_poison_sysfs "$region" "$cache_size"
+	clear_poison "$region" "$cache_size"
 	check_trace_entry "$region" "$hpa1"
-	clear_poison_sysfs "$region" "$((gran + cache_size))"
+	clear_poison "$region" "$((gran + cache_size))"
 	check_trace_entry "$region" "$hpa2"
 	validate_poison_found "-r $region" 0
 }
@@ -196,21 +202,21 @@ test_poison_by_region_offset_negative()
 	if [[ $cache_size -gt 0 ]]; then
 		cache_offset=$((cache_size - 1))
 		echo "Testing offset within cache: $cache_offset (cache_size: $cache_size)"
-		inject_poison_sysfs "$region" "$cache_offset" true
-		clear_poison_sysfs "$region" "$cache_offset" true
+		inject_poison "$region" "$cache_offset" true
+		clear_poison "$region" "$cache_offset" true
 	else
 		echo "Skipping cache test - cache_size is 0"
 	fi
 
 	# Offset exceeds region size
 	exceed_offset=$((region_size))
-	inject_poison_sysfs "$region" "$exceed_offset" true
-	clear_poison_sysfs "$region" "$exceed_offset" true
+	inject_poison "$region" "$exceed_offset" true
+	clear_poison "$region" "$exceed_offset" true
 
 	# Offset exceeds region size by a lot
 	large_offset=$((region_size * 2))
-	inject_poison_sysfs "$region" "$large_offset" true
-	clear_poison_sysfs "$region" "$large_offset" true
+	inject_poison "$region" "$large_offset" true
+	clear_poison "$region" "$large_offset" true
 }
 
 is_unaligned() {
@@ -277,7 +283,7 @@ verify_offset_translation()
 
 	# Issue a clear poison using the found region offset
 	local region_offset=$((hpa - region_resource))
-	clear_poison_sysfs "$region" "$region_offset"
+	clear_poison "$region" "$region_offset"
 
 	# Verify the trace event produces the same memdev/DPA for region HPA
 	check_trace_entry "$region" "$hpa" "$memdev" "$dpa"
@@ -306,7 +312,7 @@ run_unaligned_poison_test()
 
 		# Two samples: base and base + interleave granularity
 		for offset in 0 "$region_gran"; do
-			clear_poison_sysfs "$memdev" $((base_dpa + offset))
+			clear_poison "$memdev" $((base_dpa + offset))
 			verify_offset_translation "$region" "$region_resource"
 		done
 	done
