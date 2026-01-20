@@ -26,10 +26,50 @@ layout: page
 * v7.1 and beyond
 
 ## Opens
+- Dan suggested, Jonathan seconded, we need to use this forum for tech topics.
+  We typically have the last 30 mins to dive into such topics.
+
+- Today, ManishH shared his work and plans for the vfio-cxl driver.
 
 ## CXL CLI
+## NDCTL v84 - gathering for a Q1 release to support things through 7.0 kernel
+
+* Welcoming reviews:
+  - v6 Add error injection support (BenC)
+    https://lore.kernel.org/nvdimm/20260109160720.1823-1-Benjamin.Cheatham@amd.com/
+     
+  - v2 cxl/test: test unaligned address translations in cxl_poison events (AlisonS)
+    https://lore.kernel.org/nvdimm/20260115200241.522809-1-alison.schofield@intel.com/
+
+  - v2 cxl/cli: HPA-ordered destroy-region teardown (PawelM)
+    https://lore.kernel.org/linux-cxl/20260120143212.3006273-1-pawel.mielimonka@fujitsu.com/
+
+  - v2 daxctl: replace basename() usage with new path_basename() (AlisonS)
+    https://lore.kernel.org/nvdimm/20260116043056.542346-1-alison.schofield@intel.com/
+
+  - util/sysfs: add hint for missing root privileges on sysfs access (AlisonS)
+    https://lore.kernel.org/nvdimm/b74bfd8623fcfc4cf1078991b22b8c899147f5fb.1768530600.git.alison.schofield@intel.com/
+    
+* Waiting revisions:
+
+* Pending for v84:
+  - test/cxl-topology.sh: test switch port target lists
+  - cxl/test: add support for poison test for ELC
+  - cxl/test: add test for extended linear cache support
+  - cxl/test: move cxl-poison.sh to use cxl_test auto region
+  - cxl/test: fix cxl-poison.sh to detect the correct elc sysfs attrib
+  - cxl: add cxl-translate.sh unit test
+  - ndctl/test: fully reset nfit_test in pmem-ns unit test
+  - add support for extended linear cache
+  - README.md: exclude unsupported distros from Repology badge
 
 ## QEMU
+Soft freeze in March. 
+- event, memory repair, fixes awaiting merge
+- back-invalidate is new, tested, ready to merge (DavidL) 
+- next up: phys port control for switches 
+- Adress lookup changes
+- GregP looking for KVM support fix, it's in work by Ali
 
 ## v6.19 rc fixes
 * Fixes merged in for rc6
@@ -55,11 +95,12 @@ fa19611f96fd Documentation/driver-api/cxl: device hotplug section
 * Enable CXL PCIe port protocol error handling and logging (Terry)
   https://lore.kernel.org/linux-cxl/20260114182055.46029-1-terry.bowman@amd.com/T/#t
   - Pending v15 with some discussions still on going in v14
+  - Intend to split up for manageable review and merge.
 
 * Support soft reserve (Smita)
   https://lore.kernel.org/linux-cxl/20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com/T/#t
   - Pending next rev?
-
+  
 * Zen5 PRM translation support (Robert)
   https://lore.kernel.org/linux-cxl/20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com/T/#t
   https://lore.kernel.org/linux-cxl/20260112111707.794526-1-rrichter@amd.com/T/#t
@@ -69,11 +110,13 @@ fa19611f96fd Documentation/driver-api/cxl: device hotplug section
 * Introduce cxl_region_driver field for cxl_region (Gregory)
   https://lore.kernel.org/linux-cxl/aWfe-r7uEV-ajfhX@gourry-fedora-PF4VCD3F/T/#t
   - Needs review
+  - Maybe hold off on patch 1, the ABI intro. Take 2,3 that move code only.
 
 ## v7.1 and beyond
 * Type 2 accelerator basic support v22 (Alejandro)
   https://lore.kernel.org/linux-cxl/20251205115248.772945-1-alejandro.lucero-palau@amd.com/T/#t
   - Pending debug with PJ before v23
+  - Alejandro asking for eyes on region config from BIOS
 
 * Support Low Memory Hole v6 (Fabio)
   - Pending resolve of cxl_test support
@@ -83,6 +126,10 @@ fa19611f96fd Documentation/driver-api/cxl: device hotplug section
   https://lore.kernel.org/linux-cxl/20260109124437.4025893-1-s.neeraj@samsung.com/T/#t
   - Need acks from Ira for nvdimm changes
   - Review ongoing
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
 
 * VFIO CXL type2 support RFCv2 (Manish)
   https://lore.kernel.org/linux-cxl/20251209165019.2643142-1-mhonap@nvidia.com/T/#t
@@ -95,6 +142,10 @@ fa19611f96fd Documentation/driver-api/cxl: device hotplug section
 * Add support for multiple DC regions RFC (Anisa)
   https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
   - Of course pending DCD series as well
+  - Anisa - Happy to take over, rebase, add Fans fixes. Needs more work done on solidifying 
+    how to expose this.
+  - Dan - risk is merging ABI that we are not commited to. 
+  - Anisa to send out RFC with discussion of approach.
 
 * CXL .cache device support RFCv2 (Ben)
   https://lore.kernel.org/linux-cxl/20251111214032.8188-1-Benjamin.Cheatham@amd.com/T/#t 
