@@ -15,6 +15,109 @@ layout: page
 
 * https://pmem.io/ndctl/collab/
 
+# January 20, 2026
+
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v6.19 rc fixes
+* v7.0 merge window
+* v7.1 and beyond
+
+## Opens
+
+## CXL CLI
+
+## QEMU
+
+## v6.19 rc fixes
+* Fixes merged in for rc6
+
+## v7.0 merge window
+* Pending in cxl/next:
+345f23df5d08 cxl/region: Use do_div() for 64-bit modulo operation
+78b50b598462 cxl/region: Translate HPA to DPA and memdev in unaligned regions
+19885bd10755 cxl/region: Translate DPA->HPA in unaligned MOD3 regions
+5c604e7a9f6c cxl/core: Fix cxl_dport debugfs EINJ entries
+b4692385bb68 cxl/acpi: Remove cxl_acpi_set_cache_size()
+0db2344eb8a8 cxl/hdm: Fix newline character in dev_err() messages
+7b4f9743fbbf cxl/pci: Remove outdated FIXME comment and BUILD_BUG_ON
+fa19611f96fd Documentation/driver-api/cxl: device hotplug section
+63e5a6294dad Documentation/driver-api/cxl: BIOS/EFI expectation update
+
+  - Make ELOG and GHES log and trace consistently (Fabio)
+    https://lore.kernel.org/linux-cxl/CAJZ5v0g80j4iFMXYDKek8VBYsa0g35avvw+UK6RxutcmxSX+WA@mail.gmail.com/T/#t
+    - Picked up by Rafael
+
+* Linus declared rc8. All series want to merge should be settled by next week.
+
+* Enable CXL PCIe port protocol error handling and logging (Terry)
+  https://lore.kernel.org/linux-cxl/20260114182055.46029-1-terry.bowman@amd.com/T/#t
+  - Pending v15 with some discussions still on going in v14
+
+* Support soft reserve (Smita)
+  https://lore.kernel.org/linux-cxl/20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com/T/#t
+  - Pending next rev?
+
+* Zen5 PRM translation support (Robert)
+  https://lore.kernel.org/linux-cxl/20250822034202.26896-1-Smita.KoralahalliChannabasappa@amd.com/T/#t
+  https://lore.kernel.org/linux-cxl/20260112111707.794526-1-rrichter@amd.com/T/#t
+  - Waiting on requested addition for the Convention doc from Dan
+  - Upstream PRM usage objection from PeterZ settled?
+
+* Introduce cxl_region_driver field for cxl_region (Gregory)
+  https://lore.kernel.org/linux-cxl/aWfe-r7uEV-ajfhX@gourry-fedora-PF4VCD3F/T/#t
+  - Needs review
+
+## v7.1 and beyond
+* Type 2 accelerator basic support v22 (Alejandro)
+  https://lore.kernel.org/linux-cxl/20251205115248.772945-1-alejandro.lucero-palau@amd.com/T/#t
+  - Pending debug with PJ before v23
+
+* Support Low Memory Hole v6 (Fabio)
+  - Pending resolve of cxl_test support
+  - Will move region driver to module, outside of cxl core
+
+* LSA 2.1 label support for CXL v5 (Neeraj)
+  https://lore.kernel.org/linux-cxl/20260109124437.4025893-1-s.neeraj@samsung.com/T/#t
+  - Need acks from Ira for nvdimm changes
+  - Review ongoing
+
+* VFIO CXL type2 support RFCv2 (Manish)
+  https://lore.kernel.org/linux-cxl/20251209165019.2643142-1-mhonap@nvidia.com/T/#t
+  - Needs review
+
+* CXL type2 reset support v3 (Srirangan)
+  https://lore.kernel.org/linux-cxl/aW1ercZMyqh2Ej5F@aschofie-mobl2.lan/T/#t
+  - Needs review
+
+* Add support for multiple DC regions RFC (Anisa)
+  https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
+  - Of course pending DCD series as well
+
+* CXL .cache device support RFCv2 (Ben)
+  https://lore.kernel.org/linux-cxl/20251111214032.8188-1-Benjamin.Cheatham@amd.com/T/#t 
+  - Needs confirmed user for support
+  - Going through reviews
+
+## Patch series of interest to CXL
+* FAMFS v7 (John)
+  https://lore.kernel.org/linux-cxl/0100019bdbf77d8b-fc329dba-dc0d-4233-9b6a-b45e3e271727-000000@email.amazonses.com/T/#t
+
+* Move dax_pgoff_to_phys() v4 (John)
+  https://lore.kernel.org/linux-cxl/20260114213209.29453-2-john@groves.net/T/#t
+
+* N_PRIVATE support RFCv3 (Gregory)
+  https://lore.kernel.org/linux-cxl/20260108203755.1163107-1-gourry@gourry.net/T/#t
+
+* Add runtime hotplug state control v2 (Gregory)
+  https://lore.kernel.org/linux-cxl/df04f6e2-39ee-46f0-984d-54dcba16a011@kernel.org/T/#t
+
+* Identify the accurate NUMA ID of CFMWS v2 (Cui)
+  https://lore.kernel.org/linux-cxl/20260106031042.1606729-1-cuichao1753@phytium.com.cn/T/#t
+
+
 # October 28, 2025
 
 ## Agenda
