@@ -15,6 +15,19 @@ layout: page
 
 * https://pmem.io/ndctl/collab/
 
+# February 17, 2026
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v7.0 rc fixes
+* v7.1 merge window
+* v7.2 and beyond
+
+## Opens
+- Are there any vendors needing CXL physical hotplug to work properly upstream?
+
+
 # January 20, 2026
 
 ## Agenda
