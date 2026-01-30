@@ -26,6 +26,7 @@ layout: page
 
 ## Opens
 - Are there any vendors needing CXL physical hotplug to work properly upstream?
+- CXL Isolation support
 
 
 # January 20, 2026
