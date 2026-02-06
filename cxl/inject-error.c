@@ -28,6 +28,34 @@ static const struct option proto_inject_options[] = {
 	OPT_END(),
 };
 
+static struct inject_poison_params {
+	const char *address;
+} poison_inj_param;
+
+static struct clear_params {
+	const char *address;
+} poison_clear_param;
+
+static const struct option poison_inject_options[] = {
+	OPT_STRING('a', "address", &poison_inj_param.address,
+		   "Address for poison injection",
+		   "Device physical address for poison injection in hex or decimal"),
+#ifdef ENABLE_DEBUG
+	OPT_BOOLEAN(0, "debug", &debug, "turn on debug output"),
+#endif
+	OPT_END(),
+};
+
+static const struct option poison_clear_options[] = {
+	OPT_STRING('a', "address", &poison_clear_param.address,
+		   "Address for poison clearing",
+		   "Device physical address to clear poison from in hex or decimal"),
+#ifdef ENABLE_DEBUG
+	OPT_BOOLEAN(0, "debug", &debug, "turn on debug output"),
+#endif
+	OPT_END(),
+};
+
 static struct log_ctx iel;
 
 static struct cxl_protocol_error *find_cxl_proto_err(struct cxl_ctx *ctx,
@@ -67,6 +95,20 @@ static struct cxl_dport *find_cxl_dport(struct cxl_ctx *ctx, const char *devname
 					return dport;
 
 	log_err(&iel, "Downstream port \"%s\" not found\n", devname);
+	return NULL;
+}
+
+static struct cxl_memdev *find_cxl_memdev(struct cxl_ctx *ctx,
+					  const char *filter)
+{
+	struct cxl_memdev *memdev;
+
+	cxl_memdev_foreach(ctx, memdev) {
+		if (util_cxl_memdev_filter(memdev, filter, NULL))
+			return memdev;
+	}
+
+	log_err(&iel, "Memdev \"%s\" not found\n", filter);
 	return NULL;
 }
 
@@ -138,6 +180,133 @@ int cmd_inject_protocol_error(int argc, const char **argv, struct cxl_ctx *ctx)
 {
 	int rc = inject_protocol_action(argc, argv, ctx, proto_inject_options,
 					"inject-protocol-error <dport> -p <protocol> -s <severity> [<options>]");
+
+	return rc ? EXIT_FAILURE : EXIT_SUCCESS;
+}
+
+static int poison_action(struct cxl_ctx *ctx, const char *filter,
+			 const char *addr_str, bool inj)
+{
+	struct cxl_memdev *memdev;
+	unsigned long long addr;
+	int rc;
+
+	memdev = find_cxl_memdev(ctx, filter);
+	if (!memdev)
+		return -ENODEV;
+
+	if (!cxl_memdev_has_poison_support(memdev, inj)) {
+		log_err(&iel, "%s does not support %s\n",
+			cxl_memdev_get_devname(memdev),
+			inj ? "poison injection" : "clearing poison");
+		return -EINVAL;
+	}
+
+	errno = 0;
+	addr = strtoull(addr_str, NULL, 0);
+	if (addr == ULLONG_MAX && errno == ERANGE) {
+		log_err(&iel, "invalid address: %s", addr_str);
+		return -EINVAL;
+	}
+
+	if (inj)
+		rc = cxl_memdev_inject_poison(memdev, addr);
+	else
+		rc = cxl_memdev_clear_poison(memdev, addr);
+
+	if (rc)
+		log_err(&iel, "failed to %s %s:%s: %s\n",
+			inj ? "inject poison at" : "clear poison at",
+			cxl_memdev_get_devname(memdev), addr_str, strerror(-rc));
+	else
+		log_info(&iel,
+			 "poison %s at %s:%s\n", inj ? "injected" : "cleared",
+			 cxl_memdev_get_devname(memdev), addr_str);
+
+	return rc;
+}
+
+static int inject_poison_action(int argc, const char **argv,
+				struct cxl_ctx *ctx,
+				const struct option *options, const char *usage)
+{
+	const char * const u[] = {
+		usage,
+		NULL
+	};
+	int rc = -EINVAL;
+
+	log_init(&iel, "cxl inject-media-poison", "CXL_CLEAR_LOG");
+	argc = parse_options(argc, argv, options, u, 0);
+
+	if (debug) {
+		cxl_set_log_priority(ctx, LOG_DEBUG);
+		iel.log_priority = LOG_DEBUG;
+	} else {
+		iel.log_priority = LOG_INFO;
+	}
+
+	if (argc != 1 || !poison_inj_param.address) {
+		usage_with_options(u, options);
+		return rc;
+	}
+
+	rc = poison_action(ctx, argv[0], poison_inj_param.address, true);
+	if (rc) {
+		log_err(&iel, "Failed to inject poison on %s: %s\n", argv[0],
+			strerror(-rc));
+		return rc;
+	}
+
+	return rc;
+}
+
+int cmd_inject_media_poison(int argc, const char **argv, struct cxl_ctx *ctx)
+{
+	int rc = inject_poison_action(argc, argv, ctx, poison_inject_options,
+				      "inject-media-poison <memdev> -a <address> [<options>]");
+
+	return rc ? EXIT_FAILURE : EXIT_SUCCESS;
+}
+
+static int clear_poison_action(int argc, const char **argv, struct cxl_ctx *ctx,
+			       const struct option *options, const char *usage)
+{
+	const char * const u[] = {
+		usage,
+		NULL
+	};
+	int rc = -EINVAL;
+
+	log_init(&iel, "cxl clear-media-poison", "CXL_CLEAR_LOG");
+	argc = parse_options(argc, argv, options, u, 0);
+
+	if (debug) {
+		cxl_set_log_priority(ctx, LOG_DEBUG);
+		iel.log_priority = LOG_DEBUG;
+	} else {
+		iel.log_priority = LOG_INFO;
+	}
+
+	if (argc != 1 || !poison_clear_param.address) {
+		usage_with_options(u, options);
+		return rc;
+	}
+
+	rc = poison_action(ctx, argv[0], poison_clear_param.address, false);
+	if (rc) {
+		log_err(&iel, "Failed to clear poison on %s: %s\n", argv[0],
+			strerror(-rc));
+		return rc;
+	}
+
+	return rc;
+}
+
+int cmd_clear_media_poison(int argc, const char **argv, struct cxl_ctx *ctx)
+{
+	int rc = clear_poison_action(argc, argv, ctx, poison_clear_options,
+				     "clear-error <memdev> -a <address> [<options>]");
 
 	return rc ? EXIT_FAILURE : EXIT_SUCCESS;
 }

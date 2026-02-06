@@ -81,6 +81,8 @@ static struct cmd_struct commands[] = {
 	{ "destroy-region", .c_fn = cmd_destroy_region },
 	{ "monitor", .c_fn = cmd_monitor },
 	{ "inject-protocol-error", .c_fn = cmd_inject_protocol_error },
+	{ "inject-media-poison", .c_fn = cmd_inject_media_poison },
+	{ "clear-media-poison", .c_fn = cmd_clear_media_poison },
 };
 
 int main(int argc, const char **argv)
