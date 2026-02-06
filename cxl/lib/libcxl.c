@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <mntent.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -54,6 +56,7 @@ struct cxl_ctx {
 	struct kmod_ctx *kmod_ctx;
 	struct daxctl_ctx *daxctl_ctx;
 	void *private_data;
+	char *cxl_debugfs;
 };
 
 static void free_pmem(struct cxl_pmem *pmem)
@@ -240,6 +243,38 @@ CXL_EXPORT void *cxl_get_private_data(struct cxl_ctx *ctx)
 	return ctx->private_data;
 }
 
+static char* get_cxl_debugfs_dir(void)
+{
+	char *debugfs_dir = NULL;
+	struct mntent *ent;
+	FILE *mntf;
+
+	mntf = setmntent("/proc/mounts", "r");
+	if (!mntf)
+		return NULL;
+
+	while ((ent = getmntent(mntf)) != NULL) {
+		if (!strcmp(ent->mnt_type, "debugfs")) {
+			/* Magic '5' here is length of "/cxl" + NULL terminator */
+			debugfs_dir = calloc(strlen(ent->mnt_dir) + 5, 1);
+			if (!debugfs_dir)
+				return NULL;
+
+			strcpy(debugfs_dir, ent->mnt_dir);
+			strcat(debugfs_dir, "/cxl");
+			if (access(debugfs_dir, F_OK) != 0) {
+				free(debugfs_dir);
+				debugfs_dir = NULL;
+			}
+
+			break;
+		}
+	}
+
+	endmntent(mntf);
+	return debugfs_dir;
+}
+
 /**
  * cxl_new - instantiate a new library context
  * @ctx: context to establish
@@ -295,6 +330,7 @@ CXL_EXPORT int cxl_new(struct cxl_ctx **ctx)
 	c->udev = udev;
 	c->udev_queue = udev_queue;
 	c->timeout = 5000;
+	c->cxl_debugfs = get_cxl_debugfs_dir();
 
 	return 0;
 
@@ -350,6 +386,7 @@ CXL_EXPORT void cxl_unref(struct cxl_ctx *ctx)
 	kmod_unref(ctx->kmod_ctx);
 	daxctl_unref(ctx->daxctl_ctx);
 	info(ctx, "context %p released\n", ctx);
+	free((void *)ctx->cxl_debugfs);
 	free(ctx);
 }
 
