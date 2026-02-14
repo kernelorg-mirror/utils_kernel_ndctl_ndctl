@@ -29,6 +29,60 @@ layout: page
 - CXL Isolation support
 
 
+## CXL CLI
+## NDCTL v84 - gathering for a Q1 release to support things through 7.0 kernel
+   (non-CXL work mostly filtered out)
+
+* Welcoming reviews:
+  John's FAMFS Set:
+  - v4 daxctl: Add support for famfs mode
+  - v4 test/daxctl-famfs.sh: test famfs mode transitions
+    https://lore.kernel.org/all/0100019bd34040d9-0b6e9e4c-ecd4-464d-ab9d-88a251215442-000000@email.amazonses.com/
+
+  - v4 cxl/cli: enforce HPA-descending teardown (PawelM)
+    https://lore.kernel.org/all/20260130121638.169160-1-pawel.mielimonka@fujitsu.com/
+
+  - v2 test/cxl-poison.sh: test unaligned address translations in cxl_poison events (AlisonS)
+    https://lore.kernel.org/all/20260115200241.522809-1-alison.schofield@intel.com/
+
+  - v2 test/cxl-poison.sh: replace sysfs usage with cxl-cli cmds (AlisonS)
+    https://lore.kernel.org/all/20260214023239.1352245-1-alison.schofield@intel.com/
+
+* Waiting revisions:
+  - FAMFS - awaiting update to unit test and fix for unit test fail (JohnG)
+
+* Pending for v84: (many hiding on internal pending awaiting a coverity scan)
+  Ben's Error Inject Set:
+  - Documentation: Add docs for protocol and poison injection commands
+  - cxl/list: Add injectable errors in output
+  - cxl: Add poison injection/clear commands
+  - cxl: Add inject-protocol-error command
+  - libcxl: Add poison injection support
+  - libcxl: Add CXL protocol errors
+  - libcxl: Add debugfs path to CXL context
+  DaveJ's ELC support
+  - cxl: add support for extended linear cache
+  New unit tests:
+  - cxl/test: add test for extended linear cache support
+  - cxl/test: add cxl-translate.sh unit test
+  Updated unit tests:
+  - test/cxl-topology.sh: test switch port target lists
+  - test/cxl-poison.sh: add support for poison test for ELC
+  - test/cxl-poison.sh: move cxl-poison.sh to use cxl_test auto region
+  - test/cxl-poison.sh: fix cxl-poison.sh to detect the correct elc sysfs attrib
+
+
+## QEMU
+## v7.0 rc fixes
+## v7.1 merge window
+## v7.2 and beyond
+
+
+
+
+
+
+
 # January 20, 2026
 
 ## Agenda
