@@ -24,8 +24,33 @@ layout: page
 * v7.1 merge window
 * v7.2 and beyond
 
+
+The full transcript is posted on the CXL Discord channel.
+
 ## Opens
+
+- JonathanC: heads up on work coming wrt ras handling. 
+
+- Anisa: DCD - FAMFS first user of DCD in simplest way, single region. 
+
+- GregP: discussion about AI generated reviews. Welcomed if sender has reviewed
+  the review and finds it valid.
+
+- GregP: looking at external driver commonalities and refactoring. External drivers
+  are type2, vfio, pmem, and reset, Do we pull exports out ahead and make common? 
+  GregP will pull create region func first and post for comments.
+
+- GregP: while testing is finding race conditions. Seems to be in refactored code
+  not existing code. Try with MingL and DaveJ's latest race condition patchsets.
+
 - Are there any vendors needing CXL physical hotplug to work properly upstream?
+  Context: folks disabling ACS to make it work. Any customers or only a validation
+  requirement? (Access Control Services - blocks CXL pm init for unexpected id)
+  Users may be able to turn off this check specifically in ACS.
+
+- JohnG: working set of DCD clarifications, expect to be an ECN
+    and set of requirements around SW cache coherency - may be consortium confidential
+    Both for consortium members (or others) to ask and review.
 
 ## CXL CLI
 ## NDCTL v84 - gathering for a Q1 release to support things through 7.0 kernel
@@ -71,6 +96,12 @@ layout: page
 
 
 ## QEMU
+Tried to merge 20, got 2!!!
+Rework of phys port control, allows reset testing.
+JC wants to drop
+    - compliance mailbox: no one uses and does nothing
+    - i2c mctp not needed. Can use USB now.
+
 ## v7.0 rc fixes
 * Fix nvdimm_bus race by cxl_nvdimm. (DaveJ)
   https://lore.kernel.org/linux-cxl/20260213224038.549798-1-dave.jiang@intel.com/
@@ -115,10 +146,11 @@ layout: page
   https://lore.kernel.org/linux-cxl/20260201155438.2664640-1-alejandro.lucero-palau@amd.com/
   - v23 needs review
   - Also waiting on testing feedback from PJ
+  - No functional dependency. In Dans queue to review.
 
 * Explicit DAX driver selection and hotplug. (Gregory)
   https://lore.kernel.org/linux-cxl/20260129210442.3951412-1-gourry@gourry.net/
-  - v1 going through reviews
+  - wait on v2 reworks to review
 
 * Delay insert iomem resource. (Alison)
   https://lore.kernel.org/linux-cxl/20260212062250.1219043-1-alison.schofield@intel.com/
@@ -133,6 +165,7 @@ layout: page
   - Need response to question from Dan: https://lore.kernel.org/linux-cxl/6979522dc1916_1d331009@dwillia2-mobl4.notmuch/
   - Need to address cxl_test cxl-topology.sh regression test issue
   - Question for call: is the no interleave limitation OK?
+    Neeraj: what is the impact of adding interleave with first merge? 
 
 ## v7.2 and beyond
 * Zero sized decoder (VishalA)
@@ -141,7 +174,7 @@ layout: page
 
 * VFIO CXL type2 support RFCv2 (Manish)
   https://lore.kernel.org/linux-cxl/20251209165019.2643142-1-mhonap@nvidia.com/T/#t
-  - Needs review
+  - Manish has a new set coming for review.
 
 * CXL type2 reset support v4 (Srirangan)
   https://lore.kernel.org/linux-cxl/20260120222610.2227109-1-smadhavan@nvidia.com/
