@@ -26,8 +26,6 @@ layout: page
 
 ## Opens
 - Are there any vendors needing CXL physical hotplug to work properly upstream?
-- CXL Isolation support
-
 
 ## CXL CLI
 ## NDCTL v84 - gathering for a Q1 release to support things through 7.0 kernel
@@ -74,14 +72,84 @@ layout: page
 
 ## QEMU
 ## v7.0 rc fixes
+* Fix nvdimm_bus race by cxl_nvdimm. (DaveJ)
+  https://lore.kernel.org/linux-cxl/20260213224038.549798-1-dave.jiang@intel.com/
+  - v3 under review. Some 0-day issues.
+
+* Fix deadlock in cxl_memdev_autoremove() on attach failure. (Gregory)
+  https://lore.kernel.org/linux-cxl/20260211192228.2148713-1-gourry@gourry.net/
+  - Ready for cxl/fixes apply
+
+* Avoid DVSEC fallback after region teardown. (Smita)
+  https://lore.kernel.org/linux-cxl/20260212223800.23624-1-Smita.KoralahalliChannabasappa@amd.com/
+  - v1 Need review
+
+* Fix port enumeration failure. (Ming)
+  https://lore.kernel.org/linux-cxl/20260212223800.23624-1-Smita.KoralahalliChannabasappa@amd.com/
+  - v3 needs review
+
+* Fix leakage in __construct_region(). (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260202191330.245608-1-dave@stgolabs.net/
+  - v1 needs review
+
+* Fix testing of decoder flags as bitmasks. (Alison)
+  https://lore.kernel.org/linux-cxl/20260206181404.1025991-1-alison.schofield@intel.com/
+  - Pending v2 to split the patch, could use more review tags.
+
 ## v7.1 merge window
+* Coordinate Soft Reserved handling with CXL and HMEM. (Smita)
+  https://lore.kernel.org/linux-cxl/20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com/
+  - v6 needs review
+
+* CXL port error protocol handling and logging. (Terry)
+  https://lore.kernel.org/linux-cxl/20260203025244.3093805-1-terry.bowman@amd.com/
+  - Pending v16
+  - Patch series split into 3 parts with 1 and 2 in 7.0 now.
+  - Need tags from Bjorn for PCI bits
+
+* Pull region specific logic into new files. (Gregory)
+  https://lore.kernel.org/linux-cxl/20260211204206.2171525-1-gourry@gourry.net/
+  - v3 needs review
+
+* Type 2 device basic support. (Alejandro)
+  https://lore.kernel.org/linux-cxl/20260201155438.2664640-1-alejandro.lucero-palau@amd.com/
+  - v23 needs review
+  - Also waiting on testing feedback from PJ
+
+* Explicit DAX driver selection and hotplug. (Gregory)
+  https://lore.kernel.org/linux-cxl/20260129210442.3951412-1-gourry@gourry.net/
+  - v1 going through reviews
+
+* Delay insert iomem resource. (Alison)
+  https://lore.kernel.org/linux-cxl/20260212062250.1219043-1-alison.schofield@intel.com/
+  - Need review
+  
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
+
+* LSA 2.1 support for CXL pmem (Neeraj)
+  https://lore.kernel.org/linux-cxl/20260123113112.3488381-1-s.neeraj@samsung.com/#r
+  - Need response to question from Dan: https://lore.kernel.org/linux-cxl/6979522dc1916_1d331009@dwillia2-mobl4.notmuch/
+  - Need to address cxl_test cxl-topology.sh regression test issue
+
 ## v7.2 and beyond
+* Zero sized decoder (VishalA)
+  https://lore.kernel.org/linux-cxl/20251015024019.1189713-1-vaslot@nvidia.com/
+  * No activity since 10/25?
 
+* VFIO CXL type2 support RFCv2 (Manish)
+  https://lore.kernel.org/linux-cxl/20251209165019.2643142-1-mhonap@nvidia.com/T/#t
+  - Needs review
 
+* CXL type2 reset support v4 (Srirangan)
+  https://lore.kernel.org/linux-cxl/20260120222610.2227109-1-smadhavan@nvidia.com/
+  - Pending v5? Not much response from submitter on the series.
 
-
-
-
+* Add support for multiple DC regions RFC (Anisa)
+  https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
+  - pending DCD series as well. Anisa has taken over.
+  - Anisa to send out RFC with discussion of approach.
 
 # January 20, 2026
 
