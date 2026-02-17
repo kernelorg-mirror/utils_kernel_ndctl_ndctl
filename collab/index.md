@@ -132,6 +132,7 @@ layout: page
   https://lore.kernel.org/linux-cxl/20260123113112.3488381-1-s.neeraj@samsung.com/#r
   - Need response to question from Dan: https://lore.kernel.org/linux-cxl/6979522dc1916_1d331009@dwillia2-mobl4.notmuch/
   - Need to address cxl_test cxl-topology.sh regression test issue
+  - Question for call: is the no interleave limitation OK?
 
 ## v7.2 and beyond
 * Zero sized decoder (VishalA)
