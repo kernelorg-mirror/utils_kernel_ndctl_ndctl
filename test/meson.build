@@ -271,22 +271,27 @@ test_env = [
     'DATA_PATH=@0@'.format(meson.current_source_dir()),
 ]
 
+tests_deps = [
+  ndctl_tool,
+  daxctl_tool,
+  cxl_tool,
+  smart_notify,
+  list_smart_dimm,
+  dax_pmd,
+  dax_errors,
+  daxdev_errors,
+  dax_dev,
+  mmap,
+]
+
+if get_option('fwctl').enabled()
+  tests_deps += [fwctl]
+endif
+
 foreach t : tests
   test(t[0], t[1],
     is_parallel : false,
-    depends : [
-      ndctl_tool,
-      daxctl_tool,
-      cxl_tool,
-      smart_notify,
-      list_smart_dimm,
-      dax_pmd,
-      dax_errors,
-      daxdev_errors,
-      dax_dev,
-      fwctl,
-      mmap,
-    ],
+    depends : tests_deps,
     suite: t[2],
     timeout : 600,
     env : test_env,
