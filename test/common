@@ -168,3 +168,114 @@ check_dmesg()
 
 # CXL COMMON
 CXL_TEST_QOS_CLASS=42
+
+# CXL region replay helpers
+#
+# replay_regions() snapshots the current region configuration, performs
+# a cxl_acpi driver unbind/bind cycle to trigger region replay, and
+# verifies that the regions reconstructed during enumeration match the
+# original configuration.
+#
+# This allows tests to create regions through the user interface and
+# then replay them as auto-discovered regions during driver
+# initialization.
+#
+# See example usage in test/cxl-region-replay.sh.
+
+CXL_EXPECTED_REGION_SIGS=""
+
+cxl_get_memdev_serial()
+{
+	local memdev="$1"
+
+	"$CXL" list -m "$memdev" | jq -r '.[0].serial'
+}
+
+cxl_emit_region_signature()
+{
+	local region="$1"
+	local region_json size type ways gran state
+	local entry pos memdev serial sig
+
+	region_json=$("$CXL" list -R --targets -r "$region")
+	[[ -n "$region_json" && "$region_json" != "[]" ]] || return 1
+
+	size=$(jq -r '.[0].size' <<<"$region_json")
+	type=$(jq -r '.[0].type' <<<"$region_json")
+	ways=$(jq -r '.[0].interleave_ways' <<<"$region_json")
+	gran=$(jq -r '.[0].interleave_granularity' <<<"$region_json")
+	state=$(jq -r '.[0].decode_state' <<<"$region_json")
+
+	sig="size=$size type=$type ways=$ways gran=$gran"
+
+	while IFS= read -r entry; do
+		pos=$(jq -r '.position' <<<"$entry")
+		memdev=$(jq -r '.memdev' <<<"$entry")
+		serial=$(cxl_get_memdev_serial "$memdev") || return 1
+		[[ -n "$serial" && "$serial" != "null" ]] || return 1
+		sig="$sig pos=$pos serial=$serial"
+	done < <(jq -c '.[0].mappings | sort_by(.position)[]' <<<"$region_json")
+
+	echo "$sig state=$state"
+}
+
+cxl_collect_region_signatures()
+{
+	local region
+	local -a regions=()
+
+	mapfile -t regions < <("$CXL" list -Ri | jq -r '.[].region' | sort) || return 1
+
+	for region in "${regions[@]}"; do
+		cxl_emit_region_signature "$region" || return 1
+	done | sort
+}
+
+cxl_capture_expected_region_signatures()
+{
+	CXL_EXPECTED_REGION_SIGS=$(cxl_collect_region_signatures) || return 1
+}
+
+cxl_verify_replayed_regions()
+{
+	local actual_region_sigs
+	local -a expected_lines=()
+	local -a actual_lines=()
+	local i
+	local expected_line actual_line
+	local expected_struct actual_struct
+	local expected_state actual_state
+
+	actual_region_sigs=$(cxl_collect_region_signatures) || return 1
+
+	mapfile -t expected_lines < <(printf '%s\n' "$CXL_EXPECTED_REGION_SIGS" | sed '/^$/d')
+	mapfile -t actual_lines < <(printf '%s\n' "$actual_region_sigs" | sed '/^$/d')
+
+	[ "${#expected_lines[@]}" -eq "${#actual_lines[@]}" ] || return 1
+
+	for ((i = 0; i < ${#expected_lines[@]}; i++)); do
+		expected_line=${expected_lines[i]}
+		actual_line=${actual_lines[i]}
+
+		expected_struct=${expected_line% state=*}
+		expected_state=${expected_line##* state=}
+		actual_struct=${actual_line% state=*}
+		actual_state=${actual_line##* state=}
+
+		# Require exact structural match for the region config.
+		# Only enforce state when the expected state was commit.
+		[ "$expected_struct" = "$actual_struct" ] || return 1
+		[ "$expected_state" != "commit" ] || [ "$actual_state" = "commit" ] || return 1
+	done
+}
+
+replay_regions()
+{
+	echo "replaying existing regions"
+	cxl_capture_expected_region_signatures || return 1
+	echo 1 > /sys/bus/platform/devices/cxl_acpi.0/decoder_reset_preserve_registry
+	echo cxl_acpi.0 > /sys/bus/platform/drivers/cxl_acpi/unbind
+	echo cxl_acpi.0 > /sys/bus/platform/drivers/cxl_acpi/bind
+	echo 0 > /sys/bus/platform/devices/cxl_acpi.0/decoder_reset_preserve_registry
+	cxl_verify_replayed_regions || return 1
+}
