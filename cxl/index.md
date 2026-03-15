@@ -3,11 +3,12 @@ title: cxl
 layout: home
 ---
 [View the Project on GitHub](https://github.com/pmem/ndctl)  
-**Generated from [ndctl-83](https://github.com/pmem/ndctl/releases/tag/v83) [[tree]](https://github.com/pmem/ndctl/tree/v83)**  
+**Generated from [ndctl-84](https://github.com/pmem/ndctl/releases/tag/v84) [[tree]](https://github.com/pmem/ndctl/tree/v84)**  
 
 ---
 
 * [cxl](cxl)
+* [cxl-clear-media-poison](cxl-clear-media-poison)
 * [cxl-create-region](cxl-create-region)
 * [cxl-destroy-region](cxl-destroy-region)
 * [cxl-disable-bus](cxl-disable-bus)
@@ -18,6 +19,8 @@ layout: home
 * [cxl-enable-port](cxl-enable-port)
 * [cxl-enable-region](cxl-enable-region)
 * [cxl-free-dpa](cxl-free-dpa)
+* [cxl-inject-media-poison](cxl-inject-media-poison)
+* [cxl-inject-protocol-error](cxl-inject-protocol-error)
 * [cxl-list](cxl-list)
 * [cxl-monitor](cxl-monitor)
 * [cxl-read-labels](cxl-read-labels)

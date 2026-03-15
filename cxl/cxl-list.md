@@ -380,6 +380,21 @@ with mapping information.
 `-R; --regions`  
 Include region objects in the listing.
 
+<!-- -->
+
+    # cxl list -R
+    {
+      "region":"region0",
+      "resource":277025390592,
+      "size":549755813888,
+      "extended_linear_cache_size":274877906944,
+      "type":"ram",
+      "interleave_ways":2,
+      "interleave_granularity":256,
+      "decode_state":"commit",
+      "qos_class_mismatch":true
+    }
+
 `-X; --dax`  
 Append DAX information to region listings
 

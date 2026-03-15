@@ -1,0 +1,102 @@
+---
+layout: page
+---
+
+# NAME
+
+cxl-inject-protocol-error - Inject CXL protocol errors into CXL
+downstream ports
+
+# SYNOPSIS
+
+>     cxl inject-protocol-error <dport> [<options>]
+
+<div class="warning">
+
+Error injection can cause system instability and should only be used for
+debugging hardware and software error recovery flows. Use at your own
+risk!
+
+</div>
+
+Inject a CXL protocol error into a CXL downstream port (dport).
+Donwstream ports that support error injection will have their
+*protocol_injectable* attribute in *cxl-list* set to true.
+
+The *-p*/*--protocol* and *-s*/*--severity* options are required for
+error injection. The *-p* option is used to specify the CXL protocol to
+inject an error on; either "mem" (CXL.mem) or "cache" (CXL.cache). The
+*-s* option specifies the severity of the error and can be one of:
+"correctable", "uncorrectable", or "fatal".
+
+The types of errors (and severities) available depends on the platform.
+To find the available error types for injection, see the
+"injectable_protocol_errors" attribute under the applicable CXL bus
+object in the output of *cxl-list*. For example:
+
+    # cxl list -B
+    [
+      {
+        "bus":"root0",
+        "provider":"ACPI.CXL",
+        "injectable_protocol_errors":[
+          "mem-correctable",
+          "mem-fatal",
+        ]
+      }
+    ]
+
+The dport to inject an error into is specified by host name (e.g.
+"0000:0e:01.1"). Here’s an example injection using the example bus
+listing above:
+
+    # cxl list -TP
+     [
+      {
+        "port":"port1",
+        "host":"pci0000:e0",
+        "depth":1,
+        "decoders_committed":1,
+        "nr_dports":1,
+        "dports":[
+          {
+            "dport":"0000:e0:01.1",
+            "alias":"device:02",
+            "id":0,
+            "protocol_injectable":true
+          }
+        ]
+      }
+    ]
+
+    # cxl inject-protocol-error "0000:e0:01.1" -p mem -s correctable
+    cxl inject-protocol-error: inject_proto_err: injected mem-correctable protocol error.
+
+CXL protocol (CXL.cache/mem) error injection requires the platform to
+support ACPI v6.5+ error injection (EINJ). In addition to platform
+support, the CONFIG_ACPI_APEI_EINJ and CONFIG_ACPI_APEI_EINJ_CXL kernel
+configuration options must be enabled. For more information, view the
+Linux kernel documentation on EINJ.
+
+This command depends on the CXL debug filesystem (normally mounted at
+"/sys/kernel/debug/cxl") to inject protocol errors. If the CXL debugfs
+is not accessible the "protocol_injectable" attribute of dports will
+always be set to false, and the "injectable_protocol_errors" attribute
+of CXL busses will always be empty.
+
+# OPTIONS
+
+`-p; --protocol`  
+Which CXL protocol to inject an error on. Can be either "mem" (CXL.mem)
+or "cache (CXL.cache).
+
+`-s; --severity`  
+Severity level of error to be injected. Can be one of the following:
+"correctable", "uncorrectable", or "fatal".
+
+`--debug`  
+Enable debug output
+
+# SEE ALSO
+
+[cxl-list](cxl-list)
