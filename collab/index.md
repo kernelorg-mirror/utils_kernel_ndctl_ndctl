@@ -15,6 +15,114 @@ layout: page
 
 * https://pmem.io/ndctl/collab/
 
+# March 17, 2026
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v7.0 rc fixes
+* v7.1 merge window
+* v7.2 and beyond
+
+## Opens
+* CXL reset and decoder preservation
+
+## CXL-CLI
+
+## QEMU
+
+
+## v7.0-rc Fixes
+* Last PR v7.0-rc2
+* Queued:
+  - cxl/hdm: Avoid incorrect DVSEC fallback when HDM decoders are enabled
+  - cxl/acpi: Fix CXL_ACPI and CXL_PMEM Kconfig tristate mismatch
+  - cxl/region: Fix leakage in __construct_region()
+  - cxl/port: Fix use after free of parent_port in cxl_detach_ep()
+
+* Update mock memdev array before calling platfor_device_add() (Ming)
+  https://lore.kernel.org/linux-cxl/20260306-update_array_before_adding_mock_memdev-v1-1-a1a6af0952f1@zohomail.com/
+  - v1 needs reivew
+
+
+## v7.1 merge window
+* Queued:
+  - ACPI: NUMA: Only parse CFMWS at boot when CXL_ACPI is on
+  - cxl: Consolidate cxlmd->endpoint access (series)
+
+* Coordinate "Soft Reserved" handling with CXL and HMEM (Smita)
+  https://lore.kernel.org/linux-cxl/20260210064501.157591-1-Smita.KoralahalliChannabasappa@amd.com/T/#t
+  - v6 review ongoing. v7 coming?
+
+*  Enable CXL PCIe Port Protocol Error Handling and Logging (Terry)
+   https://lore.kernel.org/linux-cxl/20260302203648.2886956-1-terry.bowman@amd.com/T/#t
+   - v16 review ongoing
+   - Need PCI sub-system acks from Bjorn 
+
+* Type2 device basic support (Alejandro)
+  https://lore.kernel.org/linux-cxl/39624055-28cf-4def-b6ac-12256b1da681@amd.com/T/#t
+  - v23 review on going
+  - Type2 support preparation series v4
+    https://lore.kernel.org/linux-cxl/20260306164741.3796372-1-alejandro.lucero-palau@amd.com/
+  - CXL region changes for Type2 support v3
+    https://lore.kernel.org/linux-cxl/20260228173603.1125109-1-alejandro.lucero-palau@amd.com/
+
+* Save CXL HDM states across resets (Srirangan)
+  https://lore.kernel.org/linux-cxl/20260316172807.00000abc@huawei.com/T/#t
+  - v1 under review
+
+* Add cxl_reset sysfs attribute for PCI devices (Srirangan)
+  https://lore.kernel.org/linux-cxl/e6f9aaab-ce34-4a98-94e0-0d48fe78c5f4@intel.com/T/#t
+  - v5 under review
+
+* LSA 2.1 support for CXL (Neeraj)
+  https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/T/#t
+  - Pending v7
+
+* Add CXL Type-2 device passthrough support for VFIO (Manish)
+  https://lore.kernel.org/linux-cxl/20260311203440.752648-1-mhonap@nvidia.com/T/#t
+  - v1 under review
+
+* cxl/test: Eanble replay of user regions as auto regions (Alison)
+  https://lore.kernel.org/linux-cxl/20260314061952.2221030-1-alison.schofield@intel.com/T/#u
+  - v1 under review
+
+* Use proper endpoint validity check upon sanitize. (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260301221739.1726722-1-dave@stgolabs.net/
+  - v1 under review
+
+* Add endpoint decoder flags clear when PCI reset happens (DaveJ)
+  https://lore.kernel.org/linux-cxl/abH9jumyX8ayixE4@aschofie-mobl2.lan/T/#t
+  - pending v2. Can use some review.
+
+* Do not return -EAGAIN from find_or_add_dport() for newly added dport (Ming)
+  https://lore.kernel.org/linux-cxl/20260307-find_or_add_dport_not_return_eagain-v1-1-7c298461a9a4@zohomail.com/
+  - v1 needs review
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
+
+## v7.2 and beyond
+* Support back invalidate (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260315202741.3264295-1-dave@stgolabs.net/T/#t
+  - v1 needs review
+
+* RFC, workaround for CXL port PM init failure when ACS SV enabled (Fabio)
+  https://lore.kernel.org/linux-cxl/20260311164145.498207-1-fabio.m.de.francesco@linux.intel.com/
+  - Needs review and comments
+
+* Zero sized decoder (VishalA)
+  https://lore.kernel.org/linux-cxl/20251015024019.1189713-1-vaslot@nvidia.com/
+  * No activity since 10/25?
+
+* Add support for multiple DC regions RFC (Anisa)
+  https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
+  - pending DCD series as well. Anisa has taken over.
+  - Anisa to send out RFC with discussion of approach.
+
+
+
 # February 17, 2026
 ## Agenda
 * Opens
