@@ -30,8 +30,11 @@ layout: page
 ## CXL-CLI
 ## NDCTL v84 released March 14
   - https://github.com/pmem/ndctl/releases/tag/v84
+
 ## NDCTL v85 
 * Welcoming review:
+  - ndctl: Fix missing key_type parameter in ndctl_dimm_remove_key_stub (Chen)
+  - ndctl: Fix meson configuration error when fwctl is disabled (Chen)
   - test/common: add helpers for CXL region replay testing (Alison)
   - test/cxl-region-replay.sh: add test of region replay workflow (Alison)
 
