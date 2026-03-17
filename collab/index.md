@@ -26,6 +26,25 @@ layout: page
 
 ## Opens
 * CXL reset and decoder preservation
+- Smitas fix protects the HPA range for DAX failover by not resetting
+  decoders, but that protection is not actually needed, because we
+  stopped unregistering regions on failure to assemble.
+
+- May want to protect HPA ranges when userspace does hotplug on an
+  auto region. ie so that same HPA range stays available.
+
+- Type2 has defined CFMWS for Type2 that other regions cannot grab.
+  Protecting the HPA range, the Type2 root decoders, is a problem that
+  falls to Type2 driver alone?
+
+* BIOS does not always program decoders for Type2. (Jonathan)
+  Cannot know size of Type2 device.
+  Jonathan suggests a code first ECN.
+  This topic is now in the open.
+
+* FAMFS is coming soon (JohnG)
+
+* LSFMM what topics does this group want (Dan)
 
 ## CXL-CLI
 ## NDCTL v84 released March 14
@@ -45,11 +64,16 @@ layout: page
   - ndctl/lib: move nd_cmd_pkg with a flex array to end of structures (Alison)
 
 ## QEMU
-
+  - Michael picked up backlog, event updates, PPR, switch phys port series
+    Expect to see in next QEMU release 11.0
+  - Fast path KVM memory series waits til next release, Alireza.
+  - Li Chen new series may be dup of Alireza's KVM.
+  - Dropping I2C MCTP support and compliance capability, no interest.
+    Dropping from Jonathans branch and no longer expected to go upstream.
 
 ## v7.0-rc Fixes
 * Last PR v7.0-rc2
-* Queued:
+* Queued: expect rc6 PR
   - cxl/hdm: Avoid incorrect DVSEC fallback when HDM decoders are enabled
   - cxl/acpi: Fix CXL_ACPI and CXL_PMEM Kconfig tristate mismatch
   - cxl/region: Fix leakage in __construct_region()
@@ -81,14 +105,20 @@ layout: page
   https://lore.kernel.org/linux-cxl/20260201155438.2664640-1-alejandro.lucero-palau@amd.com/
   - Two prep-sets applied to cxl/next
   - v23 review ongoing (original set)
+  - PJs blocking issue seems fixed w Smita's reset patch.
 
 * Save CXL HDM states across resets (Srirangan)
   https://lore.kernel.org/linux-cxl/20260316172807.00000abc@huawei.com/
   - v1 under review
+  - See Dans latest comments here wrt where this belongs:
+https://lore.kernel.org/linux-cxl/69b98960907e9_7ee31003b@dwillia2-mobl4.notmuch/
 
 * Add cxl_reset sysfs attribute for PCI devices (Srirangan)
   https://lore.kernel.org/linux-cxl/e6f9aaab-ce34-4a98-94e0-0d48fe78c5f4@intel.com/
   - v5 under review
+
+- Find Jonathan/Dan discussion starting at 11:25 in transcript posted on Discord.
+
 
 * LSA 2.1 support for CXL (Neeraj)
   https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
@@ -120,7 +150,7 @@ layout: page
 
 ## v7.2 and beyond
 * Support back invalidate (Davidlohr)
-  https://lore.kernel.org/linux-cxl/20260315202741.3264295-1-dave@stgolabs.net/T/#t
+  https://lore.kernel.org/linux-cxl/20260315202741.3264295-1-dave@stgolabs.net/
   - v1 needs review
 
 * RFC, workaround for CXL port PM init failure when ACS SV enabled (Fabio)
