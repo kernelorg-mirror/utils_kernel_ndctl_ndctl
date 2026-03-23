@@ -22,12 +22,24 @@ rc=1
 # paired update must be made to this test.
 
 # validate the autodiscovered region
-region=$("$CXL" list -R | jq -r ".[] | .region")
-if [[ ! $region ]]; then
-	echo "failed to find autodiscovered region"
-	err "$LINENO"
-fi
+region_json=$("$CXL" list -R -u)
+[ -n "$region_json" ] || err "$LINENO"
+region=$(jq -r '.region // empty' <<<"$region_json")
+region_size=$(jq -r '.size // empty' <<<"$region_json")
+region_resource=$(jq -r '.resource // empty' <<<"$region_json")
+[ -n "$region" ] || err "$LINENO"
+[ -n "$region_size" ] || err "$LINENO"
+[ -n "$region_resource" ] || err "$LINENO"
 
+# validate the dax device created for the autodiscovered region
+dax_json=$("$DAXCTL" list -r "$region" -DMu)
+[ -n "$dax_json" ] || err "$LINENO"
+dax_dev=$(jq -r '.chardev // empty' <<<"$dax_json")
+dax_size=$(jq -r '.size // empty' <<<"$dax_json")
+dax_start=$(jq -r '.mappings[0].start // empty' <<<"$dax_json")
+[ -n "$dax_dev" ] || err "$LINENO"
+[ "$dax_size" = "$region_size" ] || err "$LINENO"
+[ "$dax_start" = "$region_resource" ] || err "$LINENO"
 
 # collect cxl_test root device id
 json=$($CXL list -b cxl_test)
