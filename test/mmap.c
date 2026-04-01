@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 
 	printf("> mmap mprot 0x%x flags 0x%x\n", mprot, mflags);
 	p = mmap(mptr, size, mprot, mflags, fd, 0x0);
-	if (!p) {
+	if (p == MAP_FAILED) {
 		perror("mmap failed");
 		return EXIT_FAILURE;
 	}
