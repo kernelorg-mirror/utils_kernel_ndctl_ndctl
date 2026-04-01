@@ -9,10 +9,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdarg.h>
 
 #define MiB(a)           ((a) * 1024UL * 1024UL)
 
 static struct timeval start_tv, stop_tv;
+static int verbose;
 
 // Calculate the difference between two time values.
 static void tvsub(struct timeval *tdiff, struct timeval *t1, struct timeval *t0)
@@ -39,6 +41,18 @@ static unsigned long long stop(void)
 	return (tdiff.tv_sec * 1000000 + tdiff.tv_usec);
 }
 
+static void trace(const char *fmt, ...)
+{
+	va_list ap;
+
+	if (!verbose)
+		return;
+
+	va_start(ap, fmt);
+	vprintf(fmt, ap);
+	va_end(ap);
+}
+
 static void test_write(unsigned long *p, size_t size)
 {
 	size_t i;
@@ -49,7 +63,7 @@ static void test_write(unsigned long *p, size_t size)
 	for (i=0, wp=p; i<(size/sizeof(*wp)); i++)
 		*wp++ = 1;
 	timeval = stop();
-	printf("Write: %10llu usec\n", timeval);
+	trace("Write: %10llu usec\n", timeval);
 }
 
 static void test_read(unsigned long *p, size_t size)
@@ -63,7 +77,7 @@ static void test_read(unsigned long *p, size_t size)
 		tmp = *wp++;
 	tmp = tmp;
 	timeval = stop();
-	printf("Read : %10llu usec\n", timeval);
+	trace("Read : %10llu usec\n", timeval);
 }
 
 int main(int argc, char **argv)
@@ -78,39 +92,42 @@ int main(int argc, char **argv)
 	size_t size, cpy_size;
 	const char *file_name = NULL;
 
-	while ((opt = getopt(argc, argv, "RMSApsrw")) != -1) {
+	while ((opt = getopt(argc, argv, "RMSApsrwv")) != -1) {
 		switch (opt) {
 			case 'R':
-				printf("> mmap: read-only\n");
+				trace("> mmap: read-only\n");
 				is_read_only = 1;
 				break;
 			case 'M':
-				printf("> mlock\n");
+				trace("> mlock\n");
 				is_mlock = 1;
 				break;
 			case 'S':
-				printf("> mlock - skip first iteration\n");
+				trace("> mlock - skip first iteration\n");
 				mlock_skip = 1;
 				break;
 			case 'A':
-				printf("> mlockall\n");
+				trace("> mlockall\n");
 				is_mlockall = 1;
 				break;
 			case 'p':
-				printf("> MAP_POPULATE\n");
+				trace("> MAP_POPULATE\n");
 				mflags |= MAP_POPULATE;
 				break;
 			case 's':
-				printf("> MAP_SHARED\n");
+				trace("> MAP_SHARED\n");
 				mflags |= MAP_SHARED;
 				break;
 			case 'r':
-				printf("> read-test\n");
+				trace("> read-test\n");
 				read_test = 1;
 				break;
 			case 'w':
-				printf("> write-test\n");
+				trace("> write-test\n");
 				write_test = 1;
+				break;
+			case 'v':
+				verbose = 1;
 				break;
 		}
 	}
@@ -122,7 +139,7 @@ int main(int argc, char **argv)
 	file_name = argv[optind];
 
 	if (!(mflags & MAP_SHARED)) {
-		printf("> MAP_PRIVATE\n");
+		trace("> MAP_PRIVATE\n");
 		mflags |= MAP_PRIVATE;
 	}
 
@@ -147,36 +164,36 @@ int main(int argc, char **argv)
 	}
 	size = stat.st_size;
 
-	printf("> open %s size %#zx flags %#x\n", file_name, size, oflags);
+	trace("> open %s size %#zx flags %#x\n", file_name, size, oflags);
 
 	ret = posix_memalign(&mptr, MiB(2), size);
 	if (ret ==0)
 		free(mptr);
 
-	printf("> mmap mprot 0x%x flags 0x%x\n", mprot, mflags);
+	trace("> mmap mprot 0x%x flags 0x%x\n", mprot, mflags);
 	p = mmap(mptr, size, mprot, mflags, fd, 0x0);
 	if (p == MAP_FAILED) {
 		perror("mmap failed");
 		return EXIT_FAILURE;
 	}
 	if ((long unsigned)p & (MiB(2)-1))
-		printf("> mmap: NOT 2MiB aligned: 0x%p\n", p);
+		trace("> mmap: NOT 2MiB aligned: 0x%p\n", p);
 	else
-		printf("> mmap: 2MiB aligned: 0x%p\n", p);
+		trace("> mmap: 2MiB aligned: 0x%p\n", p);
 
 	cpy_size = size;
 
 	for (i=0; i<3; i++) {
 
 		if (is_mlock && !mlock_skip) {
-			printf("> mlock 0x%p\n", p);
+			trace("> mlock 0x%p\n", p);
 			ret = mlock(p, size);
 			if (ret < 0) {
 				perror("mlock failed");
 				return EXIT_FAILURE;
 			}
 		} else if (is_mlockall) {
-			printf("> mlockall\n");
+			trace("> mlockall\n");
 			ret = mlockall(MCL_CURRENT|MCL_FUTURE);
 			if (ret < 0) {
 				perror("mlockall failed");
@@ -184,21 +201,21 @@ int main(int argc, char **argv)
 			}
 		}
 
-		printf("===== %d =====\n", i+1);
+		trace("===== %d =====\n", i+1);
 		if (write_test)
 			test_write(p, cpy_size);
 		if (read_test)
 			test_read(p, cpy_size);
 
 		if (is_mlock && !mlock_skip) {
-			printf("> munlock 0x%p\n", p);
+			trace("> munlock 0x%p\n", p);
 			ret = munlock(p, size);
 			if (ret < 0) {
 				perror("munlock failed");
 				return EXIT_FAILURE;
 			}
 		} else if (is_mlockall) {
-			printf("> munlockall\n");
+			trace("> munlockall\n");
 			ret = munlockall();
 			if (ret < 0) {
 				perror("munlockall failed");
@@ -210,8 +227,15 @@ int main(int argc, char **argv)
 		mlock_skip = 0;
 	}
 
-	printf("> munmap 0x%p\n", p);
+	trace("> munmap 0x%p\n", p);
 	munmap(p, size);
+	printf("mmap: ok prot=%#x flags=%#x%s%s%s%s%s\n",
+		mprot, mflags,
+		is_read_only ? " RO" : "",
+		is_mlock ? " MLOCK" : "",
+		is_mlockall ? " MLOCKALL" : "",
+		read_test ? " READ" : "",
+		write_test ? " WRITE" : "");
 	return EXIT_SUCCESS;
 }
 
