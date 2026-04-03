@@ -837,6 +837,12 @@ static int destroy_region(struct cxl_region *region)
 	unsigned int ways, i;
 	int rc;
 
+	if (cxl_region_locked_state(region) == CXL_REGION_LOCKED) {
+		log_err(&rl, "%s: cannot destroy a locked region\n",
+			devname);
+		return -EPERM;
+	}
+
 	/* First, unbind/disable the region if needed */
 	if (cxl_region_is_enabled(region)) {
 		if (param.force) {

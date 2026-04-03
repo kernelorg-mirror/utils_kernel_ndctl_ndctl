@@ -472,6 +472,12 @@ CXL_EXPORT int cxl_region_is_enabled(struct cxl_region *region)
 	return is_enabled(path);
 }
 
+CXL_EXPORT enum cxl_region_locked_state
+cxl_region_locked_state(struct cxl_region *region)
+{
+	return region->locked;
+}
+
 CXL_EXPORT bool cxl_region_qos_class_mismatch(struct cxl_region *region)
 {
 	struct cxl_decoder *root_decoder = cxl_region_get_decoder(region);
@@ -688,6 +694,13 @@ static void *add_cxl_region(void *parent, int id, const char *cxlregion_base)
 	sprintf(path, "%s/modalias", cxlregion_base);
 	if (sysfs_read_attr(ctx, path, buf) == 0)
 		region->module = util_modalias_to_module(ctx, buf);
+
+	sprintf(path, "%s/locked", cxlregion_base);
+	if (sysfs_read_attr(ctx, path, buf) < 0)
+		region->locked = CXL_REGION_LOCKED_UNKNOWN;
+	else
+		region->locked = strtoul(buf, NULL, 0) ?
+			CXL_REGION_LOCKED : CXL_REGION_UNLOCKED;
 
 	cxl_region_foreach_safe(decoder, region_dup, _r)
 		if (region_dup->id == region->id) {

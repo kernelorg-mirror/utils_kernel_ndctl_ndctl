@@ -1007,6 +1007,7 @@ struct json_object *util_cxl_region_to_json(struct cxl_region *region,
 {
 	enum cxl_decoder_mode mode = cxl_region_get_mode(region);
 	const char *devname = cxl_region_get_devname(region);
+	enum cxl_region_locked_state state;
 	struct json_object *jregion, *jobj;
 	u64 val;
 
@@ -1075,6 +1076,13 @@ struct json_object *util_cxl_region_to_json(struct cxl_region *region,
 		jobj = json_object_new_string("disabled");
 		if (jobj)
 			json_object_object_add(jregion, "state", jobj);
+	}
+
+	state = cxl_region_locked_state(region);
+	if (state != CXL_REGION_LOCKED_UNKNOWN) {
+		jobj = json_object_new_boolean(state == CXL_REGION_LOCKED);
+		if (jobj)
+			json_object_object_add(jregion, "locked", jobj);
 	}
 
 	if (flags & UTIL_JSON_MEDIA_ERRORS) {

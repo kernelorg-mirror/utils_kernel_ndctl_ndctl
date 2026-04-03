@@ -189,6 +189,7 @@ struct cxl_region {
 	u64 start;
 	u64 size;
 	u64 cache_size;
+	enum cxl_region_locked_state locked;
 	unsigned int interleave_ways;
 	unsigned int interleave_granularity;
 	enum cxl_decode_state decode_state;

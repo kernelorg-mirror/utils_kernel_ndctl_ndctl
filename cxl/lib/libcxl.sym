@@ -315,3 +315,8 @@ global:
 	cxl_memdev_clear_poison;
 	cxl_debugfs_exists;
 } LIBCXL_10;
+
+LIBCXL_12 {
+global:
+	cxl_region_locked_state;
+} LIBCXL_11;

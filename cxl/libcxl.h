@@ -354,6 +354,15 @@ int cxl_region_decode_commit(struct cxl_region *region);
 int cxl_region_decode_reset(struct cxl_region *region);
 bool cxl_region_qos_class_mismatch(struct cxl_region *region);
 
+enum cxl_region_locked_state {
+	CXL_REGION_LOCKED_UNKNOWN = -1,
+	CXL_REGION_UNLOCKED,
+	CXL_REGION_LOCKED,
+};
+
+enum cxl_region_locked_state
+cxl_region_locked_state(struct cxl_region *region);
+
 #define cxl_region_foreach(decoder, region)                                    \
 	for (region = cxl_region_get_first(decoder); region != NULL;           \
 	     region = cxl_region_get_next(region))
