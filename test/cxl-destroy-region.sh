@@ -16,6 +16,22 @@ modprobe -r cxl_test
 modprobe cxl_test
 rc=1
 
+assert_no_regions()
+{
+	regions_json="$("$CXL" list -b "$CXL_TEST_BUS" -Ri)"
+	[[ -n "$regions_json" ]] || err "$LINENO"
+	[[ "$(jq 'length' <<<"$regions_json")" -eq 0 ]] || err "$LINENO"
+}
+
+destroy_regions()
+{
+	if [[ "$*" ]]; then
+		"$CXL" destroy-region -f -b "$CXL_TEST_BUS" "$@"
+	else
+		"$CXL" destroy-region -f -b "$CXL_TEST_BUS" all
+	fi
+}
+
 check_destroy_ram()
 {
 	mem=$1
@@ -51,8 +67,15 @@ check_destroy_devdax()
 	"$CXL" destroy-region "$region"
 }
 
+# Get clean slate, including auto region resources
+destroy_regions
+assert_no_regions
+
 # Find a memory device to create regions on to test the destroy
 readarray -t mems < <("$CXL" list -b "$CXL_TEST_BUS" -M | jq -r '.[].memdev')
+[[ ${#mems[@]} -eq 0 ]] && err "$LINENO"
+
+found=0
 for mem in "${mems[@]}"; do
         ramsize="$("$CXL" list -m "$mem" | jq -r '.[].ram_size')"
         if [[ $ramsize == "null" || ! $ramsize ]]; then
@@ -63,13 +86,15 @@ for mem in "${mems[@]}"; do
                   select(.volatile_capable == true) |
                   select(.nr_targets == 1) |
                   select(.max_available_extent >= ${ramsize}) |
-                  .decoder")"
-        if [[ $decoder ]]; then
-		check_destroy_ram "$mem" "$decoder"
-		check_destroy_devdax "$mem" "$decoder"
-                break
-        fi
+                  .decoder" | head -n1)"
+	[[ -z $decoder || $decoder == "null" ]] && continue
+
+	check_destroy_ram "$mem" "$decoder"
+	check_destroy_devdax "$mem" "$decoder"
+	found=1
+	break
 done
+[[ $found -eq 1 ]] || err "$LINENO"
 
 check_dmesg "$LINENO"
 
