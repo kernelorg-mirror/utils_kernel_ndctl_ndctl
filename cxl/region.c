@@ -831,6 +831,64 @@ out:
 	return cxl_region_disable(region);
 }
 
+static int region_destroy_validate_order(struct cxl_region *region)
+{
+	const char *devname = cxl_region_get_devname(region);
+	unsigned int ways, i;
+
+	ways = cxl_region_get_interleave_ways(region);
+	if (ways == 0 || ways == UINT_MAX) {
+		log_err(&rl, "%s: error getting interleave ways\n", devname);
+		return -ENXIO;
+	}
+
+	for (i = 0; i < ways; i++) {
+		struct cxl_decoder *ep_decoder, *decoder;
+		struct cxl_port *port;
+		struct cxl_memdev *memdev;
+		int id;
+
+		ep_decoder = cxl_region_get_target_decoder(region, i);
+		if (!ep_decoder)
+			return -ENXIO;
+
+		port = cxl_decoder_get_port(ep_decoder);
+		if (!port)
+			return -ENXIO;
+
+		memdev = cxl_decoder_get_memdev(ep_decoder);
+		if (!memdev)
+			return -ENXIO;
+
+		id = cxl_decoder_get_id(ep_decoder);
+
+		cxl_decoder_foreach(port, decoder) {
+			struct cxl_memdev *other_memdev;
+
+			if (decoder == ep_decoder)
+				continue;
+
+			other_memdev = cxl_decoder_get_memdev(decoder);
+			if (other_memdev != memdev)
+				continue;
+
+			if (cxl_decoder_get_id(decoder) <= id)
+				continue;
+
+			if (cxl_decoder_get_dpa_size(decoder) == 0)
+				continue;
+
+			log_err(&rl,
+				"%s: destroy blocked, %s still has later active decoder %s\n",
+				devname, cxl_memdev_get_devname(memdev),
+				cxl_decoder_get_devname(decoder));
+			return -EBUSY;
+		}
+	}
+
+	return 0;
+}
+
 static int destroy_region(struct cxl_region *region)
 {
 	const char *devname = cxl_region_get_devname(region);
@@ -842,6 +900,10 @@ static int destroy_region(struct cxl_region *region)
 			devname);
 		return -EPERM;
 	}
+
+	rc = region_destroy_validate_order(region);
+	if (rc)
+		return rc;
 
 	/* First, unbind/disable the region if needed */
 	if (cxl_region_is_enabled(region)) {
