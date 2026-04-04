@@ -169,6 +169,7 @@ cxl_destroy_region = find_program('cxl-destroy-region.sh')
 cxl_qos_class = find_program('cxl-qos-class.sh')
 cxl_translate = find_program('cxl-translate.sh')
 cxl_elc = find_program('cxl-elc.sh')
+cxl_dax_hmem = find_program('cxl-dax-hmem.sh')
 
 tests = [
   [ 'libndctl',               libndctl,		  'ndctl' ],
@@ -203,6 +204,7 @@ tests = [
   [ 'cxl-qos-class.sh',       cxl_qos_class,      'cxl'   ],
   [ 'cxl-translate.sh',       cxl_translate,      'cxl'   ],
   [ 'cxl-elc.sh',             cxl_elc,            'cxl'   ],
+  [ 'cxl-dax-hmem.sh',        cxl_dax_hmem,       'cxl'   ],
 ]
 
 if get_option('destructive').enabled()
