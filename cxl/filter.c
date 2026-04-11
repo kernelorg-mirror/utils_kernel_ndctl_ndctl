@@ -615,12 +615,12 @@ util_cxl_memdev_filter_by_port(struct cxl_memdev *memdev, const char *bus_ident,
 		struct cxl_port *port, *top;
 
 		port = cxl_bus_get_port(bus);
-		if (util_cxl_bus_filter(bus, bus_ident))
-			if (__memdev_filter_by_port(memdev, port,
-						    cxl_bus_get_devname(bus)))
-				return memdev;
+
+		if (!util_cxl_bus_filter(bus, bus_ident))
+			continue;
 		if (__memdev_filter_by_port(memdev, port, port_ident))
-				return memdev;
+			return memdev;
+
 		top = port;
 		cxl_port_foreach_all(top, port)
 			if (__memdev_filter_by_port(memdev, port, port_ident))
@@ -1124,6 +1124,12 @@ struct json_object *cxl_filter_walk(struct cxl_ctx *ctx,
 
 		if (!util_cxl_memdev_filter(memdev, p->memdev_filter,
 					    p->serial_filter))
+			continue;
+		if (!util_cxl_memdev_filter_by_decoder(memdev,
+						       p->decoder_filter))
+			continue;
+		if (!util_cxl_memdev_filter_by_port(memdev, p->bus_filter,
+						    p->port_filter))
 			continue;
 		if (cxl_memdev_is_enabled(memdev))
 			continue;
