@@ -15,6 +15,79 @@ layout: page
 
 * https://pmem.io/ndctl/collab/
 
+# April 21, 2026
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v7.1 rc fixes
+* v7.2 merge window
+* v7.3 and beyond
+
+## Opens
+
+## CXL-CLI
+
+## QEMU
+
+## v7.1 rc fixes
+* rc1 not released yet
+* cxl/hdm: fix a warning in devm_remove_action() (Sungwoo)
+  https://lore.kernel.org/linux-cxl/20260420025547.1704692-2-iam@sung-woo.kim/
+  - Need review on v3
+* cxl/test: Update mock memdev array before calling platform_device_add() (Ming)
+  https://lore.kernel.org/linux-cxl/20260306-update_array_before_adding_mock_memdev-v1-1-a1a6af0952f1@zohomail.com/#t
+  - Need review
+
+## v7.2 merge window
+
+*  Enable CXL PCIe Port Protocol Error Handling and Logging (Terry)
+   https://lore.kernel.org/linux-cxl/20260302203648.2886956-1-terry.bowman@amd.com/
+   - Pending v17
+   - Need PCI sub-system acks from Bjorn 
+
+* Type2 device basic support (Alejandro)
+  https://lore.kernel.org/linux-cxl/20260330143827.1278677-1-alejandro.lucero-palau@amd.com/T/#t
+  https://lore.kernel.org/linux-cxl/20260403210050.1058650-1-dan.j.williams@intel.com/T/#t
+  - v25 review on going
+  - DaveJ working on a set of patches that adds type2 emulation and regression
+    testing for cxl_test.
+
+* Save CXL HDM states across resets (Srirangan)
+  https://lore.kernel.org/linux-cxl/20260316172807.00000abc@huawei.com/
+  - v2 pending?
+
+* Add cxl_reset sysfs attribute for PCI devices (Srirangan)
+  https://lore.kernel.org/linux-cxl/e6f9aaab-ce34-4a98-94e0-0d48fe78c5f4@intel.com/
+  - v6 pending?
+
+* Add CXL Type-2 device passthrough support for VFIO (Manish)
+  https://lore.kernel.org/linux-cxl/IA1PR12MB9030B0FABA316A0A3A3899E6BD202@IA1PR12MB9030.namprd12.prod.outlook.com/T/#t
+  - v2 under review
+
+* LSA 2.1 support for CXL (Neeraj)
+  https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
+  - Pending v7
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
+
+## v7.3 and beyond
+* Support back invalidate (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260315202741.3264295-1-dave@stgolabs.net/
+  - v1 needs review
+
+* RFC v2 workaround for CXL port PM init failure when ACS SV enabled (Fabio)
+  https://lore.kernel.org/linux-cxl/20260311164145.498207-1-fabio.m.de.francesco@linux.intel.com/
+  - Pending v3 and dropping RFC?
+
+* Add support for multiple DC regions RFC (Anisa)
+  https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
+  - pending DCD series as well. Anisa has taken over.
+  - Anisa to send out RFC with discussion of approach.
+  
+
 # March 17, 2026
 ## Agenda
 * Opens
