@@ -18,6 +18,9 @@ layout: page
 # April 21, 2026
 ## Agenda
 * Opens
+- LPC Microconference - Jonathan call for topics.
+  DavidL submitting microconference proposal.
+
 * cxl-cli
 * QEMU
 * v7.1 rc fixes
@@ -37,6 +40,9 @@ layout: page
   - test/aer-inject: Add aer-inject correctable and uncorrectable internal error support
   - test/cxl: Force RAS status in cxl_handle_cor_ras() and cxl_handle_ras()
 
+  Terry - won't need aer-inject if use cxl-cli inject commands, those
+  cxl-cli will need to expand. See lore list mail thread.
+
 * Waiting for revision:
   - daxctl: add support for famfs mode (JohnG)
   - test/daxctl-famfs.sh: test FAMFS mode transitions (JohnG)
@@ -44,6 +50,12 @@ layout: page
   - ndctl/lib: move nd_cmd_pkg with a flex array to end of structures (Alison)
 
 ## QEMU
+- Release 11.0.0 is available.
+- Qemu getting lots of security alerts, reduced to normal bugs because
+  CXL emulation is not considered suitable for virtualization.
+- RFC for Type2 support posted
+- Fedora 43 new OVMF issue breaks CXL switch enumeration. DaveJ has
+  work-around patch for QEMU.
 
 ## v7.1 rc fixes
 * rc1 not released yet
@@ -67,6 +79,7 @@ layout: page
   - v25 review on going
   - DaveJ working on a set of patches that adds type2 emulation and regression
     testing for cxl_test.
+  - v26 in the works integrating some of Dans proposals
 
 * Save CXL HDM states across resets (Srirangan)
   https://lore.kernel.org/linux-cxl/20260316172807.00000abc@huawei.com/
@@ -93,14 +106,17 @@ layout: page
   https://lore.kernel.org/linux-cxl/20260315202741.3264295-1-dave@stgolabs.net/
   - v1 needs review
 
+* RFC: Media Operations (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260323204013.4010634-1-dave@stgolabs.net/
+  - Non-RFC v2 pending
+
 * RFC v2 workaround for CXL port PM init failure when ACS SV enabled (Fabio)
   https://lore.kernel.org/linux-cxl/20260311164145.498207-1-fabio.m.de.francesco@linux.intel.com/
   - Pending v3 and dropping RFC?
 
 * Add support for multiple DC regions RFC (Anisa)
-  https://lore.kernel.org/linux-cxl/20260115102819.00006d55.alireza.sanaee@huawei.com/T/#t
-  - pending DCD series as well. Anisa has taken over.
-  - Anisa to send out RFC with discussion of approach.
+  https://lore.kernel.org/linux-cxl/20260411013958.47422-1-anisa.su@samsung.com/
+  - in review, esp JohnG for FAMFS usage.
   
 
 # March 17, 2026
