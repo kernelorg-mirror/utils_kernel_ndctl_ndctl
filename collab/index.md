@@ -27,6 +27,21 @@ layout: page
 ## Opens
 
 ## CXL-CLI
+## NDCTL v85 is next release, estimate June
+  - Pending branch has been busy. Please test with it where possible.
+
+* Welcoming review:
+  - Enable CXL Protocol testing (TerryB)
+    with directional feedback from BenC.
+  - test/cxl: Enable CXL protocol error testing using aer-inject
+  - test/aer-inject: Add aer-inject correctable and uncorrectable internal error support
+  - test/cxl: Force RAS status in cxl_handle_cor_ras() and cxl_handle_ras()
+
+* Waiting for revision:
+  - daxctl: add support for famfs mode (JohnG)
+  - test/daxctl-famfs.sh: test FAMFS mode transitions (JohnG)
+  - cxl/cli: HPA-ordered destroy-region teardown (PawelM)
+  - ndctl/lib: move nd_cmd_pkg with a flex array to end of structures (Alison)
 
 ## QEMU
 
