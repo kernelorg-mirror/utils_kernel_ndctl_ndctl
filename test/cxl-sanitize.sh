@@ -68,6 +68,9 @@ done
 set_timeout $inactive 3000
 start=$SECONDS
 echo 1 > /sys/bus/cxl/devices/${inactive}/security/sanitize &
+
+# Allow background sanitize to start before wait-sanitize can observe it
+sleep 1
 "$CXL" wait-sanitize $inactive || err $LINENO
 ((SECONDS > start + 2)) || err $LINENO
 
