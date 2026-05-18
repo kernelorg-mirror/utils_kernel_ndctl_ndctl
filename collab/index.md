@@ -17,12 +17,9 @@ layout: page
 
 # START THE TRANSCRIPT
 
-# April 21, 2026
+# May 19, 2026
 ## Agenda
 * Opens
-- LPC Microconference - Jonathan call for topics.
-  DavidL submitting microconference proposal.
-
 * cxl-cli
 * QEMU
 * v7.1 rc fixes
@@ -30,6 +27,73 @@ layout: page
 * v7.3 and beyond
 
 ## Opens
+* LFS/MM comments from those attended?
+
+## CXL-CLI
+
+## QEMU
+
+## v7.1 rc fixes
+* We are at v7.1-rc4
+* cxl/hdm: fix a warning in devm_remove_action() (Sungwoo)
+  https://lore.kernel.org/linux-cxl/20260420025547.1704692-2-iam@sung-woo.kim/
+  - Needs review on v3
+* cxl/test: Update mock memdev array before calling platform_device_add() (Ming)
+  https://lore.kernel.org/linux-cxl/20260306-update_array_before_adding_mock_memdev-v1-1-a1a6af0952f1@zohomail.com/#t
+  - Needs review
+
+## v7.2 merge window
+*  Enable CXL PCIe Port Protocol Error Handling and Logging (Terry)
+   https://lore.kernel.org/linux-cxl/20260505173029.2718246-1-terry.bowman@amd.com/T/#t
+   - Pending v18
+   - Needs PCI sub-system acks from Bjorn 
+
+* Type2 device basic support (Alejandro)
+  https://lore.kernel.org/linux-cxl/41e4bd2c-f11d-442f-bc3e-7198f2a2cd13@amd.com/T/#t
+  - v26 review on going
+  - Pending region resource release fix series from Dan
+
+* Type2 cxl_test support (DaveJ)
+  https://lore.kernel.org/linux-cxl/13c78882-d3df-474c-8232-6b22ef1b44ec@intel.com/T/#t
+  - v2 pending v27 of Alejandro's patch series
+
+* Save CXL HDM states across resets (Srirangan)
+  https://lore.kernel.org/linux-cxl/69cee524adfd9_1b0cc6100f2@dwillia2-mobl4.notmuch/T/#t
+  - pending v2
+
+* Add cxl_reset sysfs attribute for PCI devices (Srirangan)
+  https://lore.kernel.org/linux-cxl/20260306092322.148765-1-smadhavan@nvidia.com/T/#t
+  - pending v6
+
+* Add CXL Type-2 device passthrough support for VFIO (Manish)
+  https://lore.kernel.org/linux-cxl/IA1PR12MB9030B0FABA316A0A3A3899E6BD202@IA1PR12MB9030.namprd12.prod.outlook.com/T/#t
+  - pending v3
+
+* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+  - Pending v3
+
+## v7.3 and beyond
+* Add support for multiple DC regions RFC (Anisa)
+  https://lore.kernel.org/linux-cxl/20260411013958.47422-1-anisa.su@samsung.com/
+  - pending v1?
+
+* LSA 2.1 support for CXL (Neeraj)
+  https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
+  - Pending v7
+
+# April 21, 2026
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v7.1 rc fixes
+* v7.2 merge window
+* v7.3 and beyond
+
+## Opens
+* LPC Microconference - Jonathan call for topics.
+  DavidL submitting microconference proposal.
 
 ## CXL-CLI
 ## NDCTL v85 is next release, estimate June
@@ -69,7 +133,6 @@ layout: page
   - Need review
 
 ## v7.2 merge window
-
 *  Enable CXL PCIe Port Protocol Error Handling and Logging (Terry)
    https://lore.kernel.org/linux-cxl/20260302203648.2886956-1-terry.bowman@amd.com/
    - Pending v17
@@ -82,6 +145,18 @@ layout: page
   - DaveJ working on a set of patches that adds type2 emulation and regression
     testing for cxl_test.
   - v26 in the works integrating some of Dans proposals
+
+* Support Media Operation (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260518172303.0b210abe@jic23-huawei/T/#t
+  - v2 review on going
+
+* Support back-invalidate (Davidlohr)
+  https://lore.kernel.org/linux-cxl/20260516022617.ioafhfccxvv5as3g@offworld/T/#t
+  - v3 needs review
+
+* PM Init completion for CXL reset (Fabio)
+  https://lore.kernel.org/linux-cxl/20260428182454.464655-1-fabio.m.de.francesco@linux.intel.com/T/#t
+  - pending v2
 
 * Save CXL HDM states across resets (Srirangan)
   https://lore.kernel.org/linux-cxl/20260316172807.00000abc@huawei.com/
