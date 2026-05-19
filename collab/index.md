@@ -31,6 +31,32 @@ layout: page
 * Plumbers CFP (Davidlohr)
 
 ## CXL-CLI
+* NDCTL v85 is next release, estimate end of June
+  Pending branch has been busy. Please test with it.
+  https://github.com/pmem/ndctl/tree/pending
+
+* cxl: Add CXL type2 accelerator unit test
+  https://lore.kernel.org/nvdimm/20260515001203.2628149-1-dave.jiang@intel.com/
+  - Needs review
+
+* daxctl: add support for famfs mode (JohnG)
+  https://lore.kernel.org/nvdimm/0100019ddf06b207-eaf8cb8a-066e-4642-8947-effdb4848c20-000000@email.amazonses.com/
+  - Pending revision
+
+* test/daxctl-famfs.sh: test FAMFS mode transitions (JohnG)
+  https://lore.kernel.org/nvdimm/0100019ddf06ce8f-c323d9cd-333b-4076-9717-7c80dbed7620-000000@email.amazonses.com/
+  - Pending revision
+
+* cxl/cli: HPA-ordered destroy-region teardown (PawelM)
+  https://lore.kernel.org/linux-cxl/20260217082705.2475753-1-pawel.mielimonka@fujitsu.com/
+  - Pending revision
+
+* Enable CXL Protocol testing (TerryB)
+  - test/cxl: Enable CXL protocol error testing using aer-inject
+  - test/aer-inject: Add aer-inject correctable and uncorrectable internal error support
+  - test/cxl: Force RAS status in cxl_handle_cor_ras() and cxl_handle_ras()
+  - Pending rework for to use in cxl-test. 
+
 
 ## QEMU
 
@@ -76,10 +102,6 @@ layout: page
   https://lore.kernel.org/linux-cxl/IA1PR12MB9030B0FABA316A0A3A3899E6BD202@IA1PR12MB9030.namprd12.prod.outlook.com/T/#t
   - pending v3
 
-* Allow 6 & 12 way regions on 3-way HB interleave (Alison)
-  https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
-  - Pending v3
-
 ## v7.3 and beyond
 * Add support for multiple DC regions RFC (Anisa)
   https://lore.kernel.org/linux-cxl/20260411013958.47422-1-anisa.su@samsung.com/
@@ -88,6 +110,16 @@ layout: page
 * LSA 2.1 support for CXL (Neeraj)
   https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
   - Pending v7
+
+* Add support for mixed granularity regions (Alison)
+  Merges Robert & Alison's previous work and extends coverage to both auto
+  and user created region for every spec defined mixed gran config.
+  Previous work:
+     Allow 6 & 12 way regions on 3-way HB interleave (Alison)
+     https://lore.kernel.org/linux-cxl/20250306232239.2609017-1-alison.schofield@intel.com/
+     Support multi-level interleaving with smaller granularities for lower levels (Robert)
+     https://lore.kernel.org/linux-cxl/20251028094754.72816-1-rrichter@amd.com/
+  - Pending v1
 
 # April 21, 2026
 ## Agenda
