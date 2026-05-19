@@ -35,6 +35,10 @@ layout: page
   Pending branch has been busy. Please test with it.
   https://github.com/pmem/ndctl/tree/pending
 
+* NDCTL Test Runner introduction:
+  https://github.com/pmem/ndctl-test-runner
+  https://pmem.io/ndctl-test-runner/results.html
+
 * cxl: Add CXL type2 accelerator unit test
   https://lore.kernel.org/nvdimm/20260515001203.2628149-1-dave.jiang@intel.com/
   - Needs review
