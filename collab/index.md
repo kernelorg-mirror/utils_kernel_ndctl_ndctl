@@ -36,11 +36,17 @@ layout: page
 
 ## v7.1 rc fixes
 * We are at v7.1-rc4
+
 * cxl/hdm: fix a warning in devm_remove_action() (Sungwoo)
   https://lore.kernel.org/linux-cxl/20260420025547.1704692-2-iam@sung-woo.kim/
   - Needs review on v3
+
 * cxl/test: Update mock memdev array before calling platform_device_add() (Ming)
   https://lore.kernel.org/linux-cxl/20260306-update_array_before_adding_mock_memdev-v1-1-a1a6af0952f1@zohomail.com/#t
+  - Needs review
+
+* cxl/region: Fix out of bounds access in cxl_cancel_auto_attach() (Ming)
+  https://lore.kernel.org/linux-cxl/20260519-fix_out_of_bounds_access-v1-1-55fc60d83388@zohomail.com/
   - Needs review
 
 ## v7.2 merge window
