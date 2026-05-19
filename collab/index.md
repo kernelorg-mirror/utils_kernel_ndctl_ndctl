@@ -28,7 +28,28 @@ layout: page
 
 ## Opens
 * LFS/MM comments from those attended?
+DCD meetup: made a plan for tags, deferred on hw interleaving
+
+Anisa: another DCD use case is LMcache
+https://github.com/LMCache/LMCache/blob/f9ce8cbe105bccfae81c82cdb5b32d57c7aba63a/docs/source/kv_cache/storage_backends/dax.rst?plain=1#L9
+
+JohnG: FAMFS update
+  2 implementations exist: fuse and stand-alone driver.
+  bpf was shut down
+
+Dan: Summary Session
+  Handling port proto errors:
+  Seems to be 2 panics, maybe only one is fatal (Dan), no both are fatal (Jon)
+
+  Handling PCI details w CXL, like needing to know HDM config early and preserve
+  it. ie reset. Learn CXL pieces early without having to load entire CXL driver.
+
+(55 mins of chatter, see the transcript for more)
+
 * Plumbers CFP (Davidlohr)
+  Jul 24 first deadline for topics
+  But registration date is July 10. Ask DavidL if you need early
+  review on topic.
 
 ## CXL-CLI
 * NDCTL v85 is next release, estimate end of June
@@ -63,6 +84,11 @@ layout: page
 
 
 ## QEMU
+Fedora issue w OVMF DaveJ reported. (link in discord chat)
+Manish vfio cxl set
+Joshua configurable cxl switches
+  talk to cxl devices that are not part of current topo but are in fabric
+
 
 ## v7.1 rc fixes
 * We are at v7.1-rc4
@@ -78,6 +104,9 @@ layout: page
 * cxl/region: Fix out of bounds access in cxl_cancel_auto_attach() (Ming)
   https://lore.kernel.org/linux-cxl/20260519-fix_out_of_bounds_access-v1-1-55fc60d83388@zohomail.com/
   - Needs review
+
+? risc5 platform issue ? link ?
+
 
 ## v7.2 merge window
 *  Enable CXL PCIe Port Protocol Error Handling and Logging (Terry)
@@ -105,6 +134,15 @@ layout: page
 * Add CXL Type-2 device passthrough support for VFIO (Manish)
   https://lore.kernel.org/linux-cxl/IA1PR12MB9030B0FABA316A0A3A3899E6BD202@IA1PR12MB9030.namprd12.prod.outlook.com/T/#t
   - pending v3
+
+Add here or below:
+
+Fabios series PM Init
+
+DavidL back invalidate
+	User control for back invalidate
+	cxl-tests for back invalidate please
+
 
 ## v7.3 and beyond
 * Add support for multiple DC regions RFC (Anisa)
