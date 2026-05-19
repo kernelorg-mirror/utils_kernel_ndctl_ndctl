@@ -28,6 +28,7 @@ layout: page
 
 ## Opens
 * LFS/MM comments from those attended?
+* Plumbers CFP (Davidlohr)
 
 ## CXL-CLI
 
