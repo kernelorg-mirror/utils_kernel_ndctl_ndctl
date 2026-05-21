@@ -105,7 +105,8 @@ Joshua configurable cxl switches
   https://lore.kernel.org/linux-cxl/20260519-fix_out_of_bounds_access-v1-1-55fc60d83388@zohomail.com/
   - Needs review
 
-? risc5 platform issue ? link ?
+* RiscV platform issue
+  https://lore.kernel.org/linux-cxl/20260519015009.3430-1-cp0613@linux.alibaba.com/T/#t
 
 
 ## v7.2 merge window
