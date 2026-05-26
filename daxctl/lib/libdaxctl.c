@@ -385,13 +385,19 @@ static bool device_model_is_dax_bus(struct daxctl_dev *dev)
 	return false;
 }
 
-DAXCTL_EXPORT int daxctl_dev_is_system_ram_capable(struct daxctl_dev *dev)
+/*
+ * Test whether @dev is bound to the driver named @mod_name. Returns false for
+ * a disabled (unbound) device: the DAX bus does not retain the previous driver
+ * binding after unbind, so a device's mode cannot be determined without a
+ * bound driver.
+ */
+static int daxctl_dev_bound_to_module(struct daxctl_dev *dev, const char *mod_name)
 {
 	const char *devname = daxctl_dev_get_devname(dev);
 	struct daxctl_ctx *ctx = daxctl_dev_get_ctx(dev);
 	const char *mod_base;
 	char *mod_path;
-	char path[200];
+	char path[PATH_MAX];
 	const int len = sizeof(path);
 
 	if (!device_model_is_dax_bus(dev))
@@ -406,17 +412,59 @@ DAXCTL_EXPORT int daxctl_dev_is_system_ram_capable(struct daxctl_dev *dev)
 	}
 
 	mod_path = realpath(path, NULL);
-	if (!mod_path)
+	if (!mod_path) {
+		dbg(ctx, "%s: realpath failed for driver link\n", devname);
 		return false;
+	}
 
 	mod_base = path_basename(mod_path);
-	if (strcmp(mod_base, dax_modules[DAXCTL_DEV_MODE_RAM]) == 0) {
+	if (strcmp(mod_base, mod_name) == 0) {
 		free(mod_path);
 		return true;
 	}
 
 	free(mod_path);
 	return false;
+}
+
+DAXCTL_EXPORT int daxctl_dev_is_system_ram_mode(struct daxctl_dev *dev)
+{
+	return daxctl_dev_bound_to_module(dev, dax_modules[DAXCTL_DEV_MODE_RAM]);
+}
+
+/*
+ * Compatibility alias for daxctl_dev_is_system_ram_mode(), retained as part of
+ * the public ABI (LIBDAXCTL_10). Despite the name it tests the current driver
+ * binding, not a capability.
+ */
+DAXCTL_EXPORT int daxctl_dev_is_system_ram_capable(struct daxctl_dev *dev)
+{
+	return daxctl_dev_is_system_ram_mode(dev);
+}
+
+DAXCTL_EXPORT int daxctl_dev_is_famfs_mode(struct daxctl_dev *dev)
+{
+	return daxctl_dev_bound_to_module(dev, dax_modules[DAXCTL_DEV_MODE_FAMFS]);
+}
+
+DAXCTL_EXPORT int daxctl_dev_is_devdax_mode(struct daxctl_dev *dev)
+{
+	return daxctl_dev_bound_to_module(dev, dax_modules[DAXCTL_DEV_MODE_DEVDAX]);
+}
+
+/*
+ * Report the current mode of a device, determined from its bound driver.
+ * A device with no driver bound returns DAXCTL_DEV_MODE_UNKNOWN.
+ */
+DAXCTL_EXPORT enum daxctl_dev_mode daxctl_dev_get_mode(struct daxctl_dev *dev)
+{
+	if (daxctl_dev_is_system_ram_mode(dev))
+		return DAXCTL_DEV_MODE_RAM;
+	if (daxctl_dev_is_famfs_mode(dev))
+		return DAXCTL_DEV_MODE_FAMFS;
+	if (daxctl_dev_is_devdax_mode(dev))
+		return DAXCTL_DEV_MODE_DEVDAX;
+	return DAXCTL_DEV_MODE_UNKNOWN;
 }
 
 /*
@@ -433,7 +481,7 @@ static struct daxctl_memory *daxctl_dev_alloc_mem(struct daxctl_dev *dev)
 	char buf[SYSFS_ATTR_SIZE];
 	int node_num;
 
-	if (!daxctl_dev_is_system_ram_capable(dev))
+	if (!daxctl_dev_is_system_ram_mode(dev))
 		return NULL;
 
 	mem = calloc(1, sizeof(*mem));
@@ -939,7 +987,7 @@ static int daxctl_dev_enable(struct daxctl_dev *dev, enum daxctl_dev_mode mode)
 	struct daxctl_region *region = daxctl_dev_get_region(dev);
 	const char *devname = daxctl_dev_get_devname(dev);
 	struct daxctl_ctx *ctx = daxctl_dev_get_ctx(dev);
-	const char *mod_name = dax_modules[mode];
+	const char *mod_name;
 	int rc;
 
 	if (!device_model_is_dax_bus(dev)) {
@@ -951,7 +999,13 @@ static int daxctl_dev_enable(struct daxctl_dev *dev, enum daxctl_dev_mode mode)
 	if (daxctl_dev_is_enabled(dev))
 		return 0;
 
-	if (mode >= DAXCTL_DEV_MODE_END || mod_name == NULL) {
+	if (mode < 0 || mode >= DAXCTL_DEV_MODE_END) {
+		err(ctx, "%s: Invalid mode: %d\n", devname, mode);
+		return -EINVAL;
+	}
+
+	mod_name = dax_modules[mode];
+	if (mod_name == NULL) {
 		err(ctx, "%s: Invalid mode: %d\n", devname, mode);
 		return -EINVAL;
 	}
@@ -981,6 +1035,11 @@ DAXCTL_EXPORT int daxctl_dev_enable_devdax(struct daxctl_dev *dev)
 DAXCTL_EXPORT int daxctl_dev_enable_ram(struct daxctl_dev *dev)
 {
 	return daxctl_dev_enable(dev, DAXCTL_DEV_MODE_RAM);
+}
+
+DAXCTL_EXPORT int daxctl_dev_enable_famfs(struct daxctl_dev *dev)
+{
+	return daxctl_dev_enable(dev, DAXCTL_DEV_MODE_FAMFS);
 }
 
 DAXCTL_EXPORT int daxctl_dev_disable(struct daxctl_dev *dev)

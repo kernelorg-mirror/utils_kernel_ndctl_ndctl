@@ -104,3 +104,12 @@ LIBDAXCTL_10 {
 global:
 	daxctl_dev_is_system_ram_capable;
 } LIBDAXCTL_9;
+
+LIBDAXCTL_11 {
+global:
+	daxctl_dev_enable_famfs;
+	daxctl_dev_is_famfs_mode;
+	daxctl_dev_is_devdax_mode;
+	daxctl_dev_get_mode;
+	daxctl_dev_is_system_ram_mode;
+} LIBDAXCTL_10;

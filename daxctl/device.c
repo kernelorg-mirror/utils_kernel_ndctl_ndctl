@@ -38,17 +38,18 @@ static struct {
 	bool verbose;
 } param;
 
-enum dev_mode {
-	DAXCTL_DEV_MODE_UNKNOWN,
-	DAXCTL_DEV_MODE_DEVDAX,
-	DAXCTL_DEV_MODE_RAM,
+enum reconfig_mode {
+	RECONFIG_MODE_UNKNOWN,
+	RECONFIG_MODE_DEVDAX,
+	RECONFIG_MODE_RAM,
+	RECONFIG_MODE_FAMFS,
 };
 
 struct mapping {
 	unsigned long long start, end, pgoff;
 };
 
-static enum dev_mode reconfig_mode = DAXCTL_DEV_MODE_UNKNOWN;
+static enum reconfig_mode reconfig_mode = RECONFIG_MODE_UNKNOWN;
 static long long align = -1;
 static long long size = -1;
 static unsigned long flags;
@@ -463,13 +464,20 @@ static const char *parse_device_options(int argc, const char **argv,
 			if (param.align)
 				align = __parse_size64(param.align, &units);
 		} else if (strcmp(param.mode, "system-ram") == 0) {
-			reconfig_mode = DAXCTL_DEV_MODE_RAM;
+			reconfig_mode = RECONFIG_MODE_RAM;
 		} else if (strcmp(param.mode, "devdax") == 0) {
-			reconfig_mode = DAXCTL_DEV_MODE_DEVDAX;
+			reconfig_mode = RECONFIG_MODE_DEVDAX;
 			if (param.no_online) {
 				fprintf(stderr,
 					"--no-online is incompatible with --mode=devdax\n");
-				rc =  -EINVAL;
+				rc = -EINVAL;
+			}
+		} else if (strcmp(param.mode, "famfs") == 0) {
+			reconfig_mode = RECONFIG_MODE_FAMFS;
+			if (param.no_online) {
+				fprintf(stderr,
+					"--no-online is incompatible with --mode=famfs\n");
+				rc = -EINVAL;
 			}
 		}
 		break;
@@ -689,17 +697,10 @@ static int dev_destroy(struct daxctl_dev *dev)
 	return 0;
 }
 
-static int disable_devdax_device(struct daxctl_dev *dev)
+static int disable_mode_device(struct daxctl_dev *dev)
 {
-	struct daxctl_memory *mem = daxctl_dev_get_memory(dev);
-	const char *devname = daxctl_dev_get_devname(dev);
 	int rc;
 
-	if (mem) {
-		fprintf(stderr, "%s was already in system-ram mode\n",
-			devname);
-		return 1;
-	}
 	rc = daxctl_dev_disable(dev);
 	if (rc) {
 		fprintf(stderr, "%s: disable failed: %s\n",
@@ -724,11 +725,21 @@ static int reconfig_mode_system_ram(struct daxctl_dev *dev)
 	}
 
 	if (daxctl_dev_is_enabled(dev)) {
-		rc = disable_devdax_device(dev);
-		if (rc < 0)
-			return rc;
-		if (rc > 0)
+		switch (daxctl_dev_get_mode(dev)) {
+		case DAXCTL_DEV_MODE_RAM:
+			/* already in system-ram mode */
 			skip_enable = 1;
+			break;
+		case DAXCTL_DEV_MODE_FAMFS:
+		case DAXCTL_DEV_MODE_DEVDAX:
+			rc = disable_mode_device(dev);
+			if (rc)
+				return rc;
+			break;
+		default:
+			fprintf(stderr, "%s: unknown mode\n", devname);
+			return -EINVAL;
+		}
 	}
 
 	if (!skip_enable) {
@@ -750,7 +761,7 @@ static int disable_system_ram_device(struct daxctl_dev *dev)
 	int rc;
 
 	if (!mem) {
-		fprintf(stderr, "%s was already in devdax mode\n", devname);
+		fprintf(stderr, "%s is not in system-ram mode\n", devname);
 		return 1;
 	}
 
@@ -786,15 +797,60 @@ static int disable_system_ram_device(struct daxctl_dev *dev)
 
 static int reconfig_mode_devdax(struct daxctl_dev *dev)
 {
+	const char *devname = daxctl_dev_get_devname(dev);
 	int rc;
 
 	if (daxctl_dev_is_enabled(dev)) {
-		rc = disable_system_ram_device(dev);
-		if (rc)
-			return rc;
+		switch (daxctl_dev_get_mode(dev)) {
+		case DAXCTL_DEV_MODE_RAM:
+			rc = disable_system_ram_device(dev);
+			if (rc)
+				return rc;
+			break;
+		case DAXCTL_DEV_MODE_FAMFS:
+		case DAXCTL_DEV_MODE_DEVDAX:
+			rc = disable_mode_device(dev);
+			if (rc)
+				return rc;
+			break;
+		default:
+			fprintf(stderr, "%s: unknown mode\n", devname);
+			return -EINVAL;
+		}
 	}
 
 	rc = daxctl_dev_enable_devdax(dev);
+	if (rc)
+		return rc;
+
+	return 0;
+}
+
+static int reconfig_mode_famfs(struct daxctl_dev *dev)
+{
+	const char *devname = daxctl_dev_get_devname(dev);
+	int rc;
+
+	if (daxctl_dev_is_enabled(dev)) {
+		switch (daxctl_dev_get_mode(dev)) {
+		case DAXCTL_DEV_MODE_RAM:
+			fprintf(stderr,
+				"%s is in system-ram mode; must be in devdax mode to convert to famfs\n",
+				devname);
+			return -EINVAL;
+		case DAXCTL_DEV_MODE_FAMFS:
+		case DAXCTL_DEV_MODE_DEVDAX:
+			rc = disable_mode_device(dev);
+			if (rc)
+				return rc;
+			break;
+		default:
+			fprintf(stderr, "%s: unknown mode\n", devname);
+			return -EINVAL;
+		}
+	}
+
+	rc = daxctl_dev_enable_famfs(dev);
 	if (rc)
 		return rc;
 
@@ -862,7 +918,7 @@ static int do_create(struct daxctl_region *region, long long val,
 	return 0;
 }
 
-static int do_reconfig(struct daxctl_dev *dev, enum dev_mode mode,
+static int do_reconfig(struct daxctl_dev *dev, enum reconfig_mode mode,
 		struct json_object **jdevs)
 {
 	const char *devname = daxctl_dev_get_devname(dev);
@@ -881,11 +937,14 @@ static int do_reconfig(struct daxctl_dev *dev, enum dev_mode mode,
 	}
 
 	switch (mode) {
-	case DAXCTL_DEV_MODE_RAM:
+	case RECONFIG_MODE_RAM:
 		rc = reconfig_mode_system_ram(dev);
 		break;
-	case DAXCTL_DEV_MODE_DEVDAX:
+	case RECONFIG_MODE_DEVDAX:
 		rc = reconfig_mode_devdax(dev);
+		break;
+	case RECONFIG_MODE_FAMFS:
+		rc = reconfig_mode_famfs(dev);
 		break;
 	default:
 		fprintf(stderr, "%s: unknown mode requested: %d\n",

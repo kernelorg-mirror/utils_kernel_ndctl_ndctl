@@ -46,10 +46,24 @@ struct json_object *util_daxctl_dev_to_json(struct daxctl_dev *dev,
 			json_object_object_add(jdev, "align", jobj);
 	}
 
-	if (mem)
+	switch (daxctl_dev_get_mode(dev)) {
+	case DAXCTL_DEV_MODE_RAM:
 		jobj = json_object_new_string("system-ram");
-	else
+		break;
+	case DAXCTL_DEV_MODE_FAMFS:
+		jobj = json_object_new_string("famfs");
+		break;
+	case DAXCTL_DEV_MODE_DEVDAX:
+	default:
+		/* A device bound to device_dax is in devdax mode. A device with
+		 * no driver bound (DAXCTL_DEV_MODE_UNKNOWN) is reported as devdax
+		 * too, the legacy default (the disabled modifier is added later
+		 * in this function if applicable).
+		 */
 		jobj = json_object_new_string("devdax");
+		break;
+	}
+
 	if (jobj)
 		json_object_object_add(jdev, "mode", jobj);
 
