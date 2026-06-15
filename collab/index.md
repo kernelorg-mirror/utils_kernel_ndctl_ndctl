@@ -17,6 +17,141 @@ layout: page
 
 # START THE TRANSCRIPT
 
+# June 15, 2026
+## Agenda
+* Opens
+* cxl-cli
+* QEMU
+* v7.2 rc fixes
+* v7.3 merge window
+* v7.4 and beyond
+
+## Opens
+
+## CXL CLI
+
+## QEMU
+
+## v7.2 rc fixes
+- **cxl: Convert remaining PCIBIOS errors to errno (v1)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260607070241.48978-1-icheng@nvidia.com/
+  - Need review
+
+- **cxl/pci: Fix out-of-bounds read of the RAS Header Log (v1)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260605041602.37944-1-icheng@nvidia.com/
+  - Need review
+
+- **cxl/mbox: Bound the output payload allocation to mailbox payload size (v1)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260611094546.31496-1-icheng@nvidia.com/
+  - Need review
+
+- **cxl/features: Bound Get Feature read count to the output buffer (v1)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260611094944.31638-1-icheng@nvidia.com/
+  - Pending v2
+
+- **cxl/region: Fix NULL pointer within p->targets[] (v1)**
+  - Li Ming <ming.li@zohomail.com>
+  - https://lore.kernel.org/linux-cxl/20260530-fix_null_in_targets_array-v1-1-312c3bf1fe0f@zohomail.com/
+  - Review on going? Alison?
+
+- **cxl/ras: Fix match_memdev_by_parent() pointer type mismatch (v1)**
+  - Terry Bowman <terry.bowman@amd.com>
+  - https://lore.kernel.org/linux-cxl/20260608224319.587614-1-terry.bowman@amd.com/
+  - Pending v2
+
+- **cxl/port: Fix missing port lock in cxl_dport_remove() (v2)**
+  - Terry Bowman <terry.bowman@amd.com>
+  - https://lore.kernel.org/linux-cxl/20260608223533.583278-1-terry.bowman@amd.com/
+  - Richard will bundle this fix with additional fixes?
+
+- **cxl: Allow passthrough decoders with >16K granularity (v1)**
+  - Alison Schofield <alison.schofield@intel.com>
+  - https://lore.kernel.org/linux-cxl/cover.1781136281.git.alison.schofield@intel.com/
+  - Need review
+
+## v7.3 merge window
+- **DCD: Add support for Dynamic Capacity Devices (DCD) (v10)**
+  - Anisa Su <anisa.su887@gmail.com>
+  - https://lore.kernel.org/linux-cxl/cover.1779528761.git.anisa.su@samsung.com/
+  - Pending v11
+
+- **Type2 device basic support (v27)**
+  - Alejandro Lucero Palau <alejandro.lucero-palau@amd.com>
+  - https://lore.kernel.org/linux-cxl/20260609215755.8685-1-alejandro.lucero-palau@amd.com/
+  - Pending v28, Alejandro requested a check on implementation direction from Dan.
+  https://lore.kernel.org/linux-cxl/50d8e423-8248-4e26-901b-010d14d22e67@amd.com/
+
+- **Enable CXL PCIe Port Protocol Error handling and logging (v17)**
+  - Terry Bowman <terry.bowman@amd.com>
+  - https://lore.kernel.org/linux-cxl/20260505173029.2718246-1-terry.bowman@amd.com/
+  - Pending v18. Need Bjorn acks.
+
+- **cxl: Add cxl_reset sysfs attribute for memdevs (v6)**
+  - Srirangan Madhavan <smadhavan@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260528083154.137979-1-smadhavan@nvidia.com/
+  - Review discussions on going. Pending v7.
+
+- **cxl: Support Back-Invalidate (v5)**
+  - Davidlohr Bueso <dave@stgolabs.net>
+  - https://lore.kernel.org/linux-cxl/20260605003329.2584012-1-dave@stgolabs.net/
+  - Needs review.
+
+- **cxl: Support mixed-granularity region interleaves (v2)**
+  - Alison Schofield <alison.schofield@intel.com>
+  - https://lore.kernel.org/linux-cxl/cover.1781199122.git.alison.schofield@intel.com/
+  - Needs review. Pending v3.
+
+- **cxl: Add CXL type2 accelerator support for cxl_test (v5)**
+  - Dave Jiang <dave.jiang@intel.com>
+  - https://lore.kernel.org/linux-cxl/20260611234409.256765-1-dave.jiang@intel.com/
+  - Could use more review.
+
+- **Support zero-sized HDM decoders (v4)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260607081345.61954-1-icheng@nvidia.com/
+  - Need review. Pending v5. Alison asked for cxl_test test.
+
+- **cxl/mbox: Support Media Operation (v2)**
+  - Davidlohr Bueso <dave@stgolabs.net>
+  - https://lore.kernel.org/linux-cxl/20260428200410.705675-1-dave@stgolabs.net/
+  - Pending v3?
+
+- **cxl/test: reject wrapped GET_LOG offsets (v1)**
+  - Samuel Moelius <sam.moelius@trailofbits.com>
+  - https://lore.kernel.org/linux-cxl/20260605142036.2062347-1-sam.moelius@trailofbits.com/
+  - Need review.
+
+- **cxl: docs/linux/dax-driver - fix typos (v1)**
+  - Zenghui Yu <zenghui.yu@linux.dev>
+  - https://lore.kernel.org/linux-cxl/20260614161458.88942-1-zenghui.yu@linux.dev/
+  - Ready to apply with v7.2-rc1 drop.
+
+- **CXL PM Init support**
+  - Fabio M. De Francesco" <fabio.m.de.francesco@linux.intel.com>
+  - https://lore.kernel.org/linux-cxl/20260428182454.464655-1-fabio.m.de.francesco@linux.intel.com/T/#t
+  - Pending v2
+
+## v7.4 and beyond
+* **LSA 2.1 support for CXL**
+  Neeraj
+  https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
+  - Pending v7
+
+- **RFC: tools/testing/cxl: Support multi-decoder shared-dport topology (v1)**
+  - Richard Cheng <icheng@nvidia.com>
+  - https://lore.kernel.org/linux-cxl/20260521084806.28232-1-icheng@nvidia.com/
+  - Ready for non-RFC?
+
+- **RFC: PCI/CXL: Add RDPAS support for CXL.io (v1)**
+  - Dave Jiang <dave.jiang@intel.com>
+  - https://lore.kernel.org/linux-cxl/20260526182334.1010870-1-dave.jiang@intel.com/
+  - Pending v2. Terry please review.
+
+
 # May 19, 2026
 ## Agenda
 * Opens
