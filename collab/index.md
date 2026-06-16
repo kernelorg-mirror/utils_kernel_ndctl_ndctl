@@ -30,6 +30,48 @@ layout: page
 
 ## CXL CLI
 
+* NDCTL v85 is next release, expect end of June
+  Pending branch has been busy. Please test with it.
+  https://github.com/pmem/ndctl/tree/pending
+
+* NDCTL Test Runner
+  Reminder: it is there doing daily and weekly runs
+    Reports here: https://pmem.io/ndctl-test-runner/results.html
+  Reminder: available for you to copy to set up like testing
+    Repo here: https://github.com/pmem/ndctl-test-runner
+
+* v2 cxl: Add CXL type2 accelerator unit test  (DaveJ)
+  https://lore.kernel.org/nvdimm/20260515001203.2628149-1-dave.jiang@intel.com/
+  - Companion to CXL driver set. Nice to review together. 
+  - Needs review.
+
+* v2 0/2 daxctl, util/sysfs: fix builtin-driver false failure on enable (ChenPei)
+  https://lore.kernel.org/nvdimm/20260526132251.254476-1-cp0613@linux.alibaba.com/
+  - Needs review.
+
+* v6 0/7 ndctl: Dynamic Capacity additions for cxl-cli (AnisaS)
+  https://lore.kernel.org/nvdimm/20260523095043.471098-1-anisa.su@samsung.com/
+  - Companion to CXL driver set. Nice to review together.
+  - Expecting a new rev.
+  - Needs review.
+
+* cxl/region: allow mixed-granularity regions (AlisonS)
+  https://lore.kernel.org/nvdimm/fa5c109f08824180f58341ebd9055545a2ff3142.1780099216.git.alison.schofield@intel.com/
+  - Companion to CXL driver set. Nice to review together.
+  - Needs review
+
+* 0/3 ndctl: Add CXL region passthrough >16K gran test (AlisonS)
+  https://lore.kernel.org/nvdimm/cover.1781136221.git.alison.schofield@intel.com/
+  - Companion to CXL driver set. Nice to review together.
+  - Needs review
+
+* cxl/cli: HPA-ordered destroy-region teardown (PawelM)
+  https://lore.kernel.org/linux-cxl/20260217082705.2475753-1-pawel.mielimonka@fujitsu.com/
+  - Pending revision
+
+* Enable CXL Protocol testing (TerryB)
+  - Pending rework for to use in cxl-test.
+
 
 ## QEMU
 
