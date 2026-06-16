@@ -73,6 +73,11 @@ layout: page
   - https://lore.kernel.org/linux-cxl/cover.1781136281.git.alison.schofield@intel.com/
   - Need review
 
+- **cxl: Fix MCE handler accessing issue for endpoint (v1)**
+  - Dave Jiang <dave.jiang@intel.com>
+  - https://lore.kernel.org/linux-cxl/20260616004007.4186004-1-dave.jiang@intel.com/T/#t
+  - Need review
+
 ## v7.3 merge window
 - **DCD: Add support for Dynamic Capacity Devices (DCD) (v10)**
   - Anisa Su <anisa.su887@gmail.com>
