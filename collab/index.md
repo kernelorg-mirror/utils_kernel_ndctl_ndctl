@@ -27,6 +27,7 @@ layout: page
 * v7.4 and beyond
 
 ## Opens
+-  Poll for new times to be more Asia friendly.
 
 ## CXL CLI
 
@@ -74,6 +75,11 @@ layout: page
 
 
 ## QEMU
+Performance fixup, adds a RAM region
+risc v support in
+Fedora , DaveJ issue, OVMF, still open
+Initial UIO posted as RFC
+Manish, vfio, RFC v2 is WIP
 
 ## v7.2 rc fixes
 - **cxl: Convert remaining PCIBIOS errors to errno (v1)**
@@ -121,6 +127,7 @@ layout: page
   - Anisa Su <anisa.su887@gmail.com>
   - https://lore.kernel.org/linux-cxl/cover.1779528761.git.anisa.su@samsung.com/
   - Pending v11
+  - Anisa working all the things :) Sashiko, DaveJ, coord w ndctl, etc...
 
 - **Type2 device basic support (v27)**
   - Alejandro Lucero Palau <alejandro.lucero-palau@amd.com>
@@ -132,11 +139,15 @@ layout: page
   - Terry Bowman <terry.bowman@amd.com>
   - https://lore.kernel.org/linux-cxl/20260505173029.2718246-1-terry.bowman@amd.com/
   - Pending v18. Need Bjorn acks.
+  - Terry working Sashiko reported issues.
 
 - **cxl: Add cxl_reset sysfs attribute for memdevs (v6)**
   - Srirangan Madhavan <smadhavan@nvidia.com>
   - https://lore.kernel.org/linux-cxl/20260528083154.137979-1-smadhavan@nvidia.com/
   - Review discussions on going. Pending v7.
+  - Dan: PCI reset wants to run w/o drivers loaded. The cxl hdm code is all post
+    driver load now. So pci core will need do/understand hdm mappings before CXL
+    loads. (See the lore discussion)
 
 - **cxl: Support Back-Invalidate (v5)**
   - Davidlohr Bueso <dave@stgolabs.net>
@@ -147,6 +158,7 @@ layout: page
   - Alison Schofield <alison.schofield@intel.com>
   - https://lore.kernel.org/linux-cxl/cover.1781199122.git.alison.schofield@intel.com/
   - Needs review.
+  - Terry to relay to RobertR.
 
 - **cxl: Add CXL type2 accelerator support for cxl_test (v5)**
   - Dave Jiang <dave.jiang@intel.com>
@@ -157,11 +169,12 @@ layout: page
   - Richard Cheng <icheng@nvidia.com>
   - https://lore.kernel.org/linux-cxl/20260607081345.61954-1-icheng@nvidia.com/
   - Need review. Pending v5. Alison asked for cxl_test test.
+  - Dan: looking at spec, which decoders can be zero size. Will add to lore thread.
 
 - **cxl/mbox: Support Media Operation (v2)**
   - Davidlohr Bueso <dave@stgolabs.net>
   - https://lore.kernel.org/linux-cxl/20260428200410.705675-1-dave@stgolabs.net/
-  - Pending v3?
+  - Pending v3
 
 - **cxl/test: reject wrapped GET_LOG offsets (v1)**
   - Samuel Moelius <sam.moelius@trailofbits.com>
@@ -188,7 +201,7 @@ layout: page
   - Dave Jiang <dave.jiang@intel.com>
   - https://lore.kernel.org/linux-cxl/20260526182334.1010870-1-dave.jiang@intel.com/
   - Pending v2. Terry please review.
-
+  - Enabling feature as spec defines. No platform intercept ATM.
 
 # May 19, 2026
 ## Agenda
