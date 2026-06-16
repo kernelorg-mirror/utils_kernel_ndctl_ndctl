@@ -30,6 +30,7 @@ layout: page
 
 ## CXL CLI
 
+
 ## QEMU
 
 ## v7.2 rc fixes
@@ -52,11 +53,6 @@ layout: page
   - Richard Cheng <icheng@nvidia.com>
   - https://lore.kernel.org/linux-cxl/20260611094944.31638-1-icheng@nvidia.com/
   - Pending v2
-
-- **cxl/region: Fix NULL pointer within p->targets[] (v1)**
-  - Li Ming <ming.li@zohomail.com>
-  - https://lore.kernel.org/linux-cxl/20260530-fix_null_in_targets_array-v1-1-312c3bf1fe0f@zohomail.com/
-  - Review on going? Alison?
 
 - **cxl/ras: Fix match_memdev_by_parent() pointer type mismatch (v1)**
   - Terry Bowman <terry.bowman@amd.com>
@@ -108,7 +104,7 @@ layout: page
 - **cxl: Support mixed-granularity region interleaves (v2)**
   - Alison Schofield <alison.schofield@intel.com>
   - https://lore.kernel.org/linux-cxl/cover.1781199122.git.alison.schofield@intel.com/
-  - Needs review. Pending v3.
+  - Needs review.
 
 - **cxl: Add CXL type2 accelerator support for cxl_test (v5)**
   - Dave Jiang <dave.jiang@intel.com>
@@ -145,11 +141,6 @@ layout: page
   Neeraj
   https://lore.kernel.org/linux-cxl/1296674576.21772944201878.JavaMail.epsvc@epcpadp1new/
   - Pending v7
-
-- **RFC: tools/testing/cxl: Support multi-decoder shared-dport topology (v1)**
-  - Richard Cheng <icheng@nvidia.com>
-  - https://lore.kernel.org/linux-cxl/20260521084806.28232-1-icheng@nvidia.com/
-  - Ready for non-RFC?
 
 - **RFC: PCI/CXL: Add RDPAS support for CXL.io (v1)**
   - Dave Jiang <dave.jiang@intel.com>
