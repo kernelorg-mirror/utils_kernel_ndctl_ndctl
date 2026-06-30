@@ -16,7 +16,9 @@ mode
 Reconfigure the operational mode of a dax device. This can be used to
 convert a regular *devdax* mode device to the *system-ram* mode which
 arranges for the dax range to be hot-plugged into the system as regular
-memory.
+memory. A *devdax* mode device can also be converted to *famfs* mode,
+which binds it to the fsdev_dax driver for use by the famfs
+shared-memory filesystem (see <https://famfs.org>).
 
 <div class="note">
 
@@ -136,6 +138,20 @@ userspace memory allocator like
       "mode":"devdax"
     }
 
+- Reconfigure dax0.0 (currently in devdax mode) to famfs mode
+
+<!-- -->
+
+    # daxctl reconfigure-device --mode=famfs dax0.0
+    [
+      {
+        "chardev":"dax0.0",
+        "size":16777216000,
+        "target_node":2,
+        "mode":"famfs"
+      }
+    ]
+
 - Reconfigure all dax devices on region0 to system-ram mode
 
 <!-- -->
@@ -217,6 +233,11 @@ Specify the mode to which the dax device(s) should be reconfigured.
 - "devdax": switch to the normal "device dax" mode. This requires the
   kernel to support hot-unplugging *kmem* based memory. If this is not
   available, a reboot is the only way to switch back to *devdax* mode.
+
+- "famfs": bind the device to the fsdev_dax driver for use by the famfs
+  shared-memory filesystem (<https://famfs.org>). The device must
+  currently be in "devdax" mode; converting directly from "system-ram"
+  is rejected.
 
 `-N; --no-online`  
 By default, memory sections provided by system-ram devices will be
